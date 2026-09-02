@@ -1,7 +1,14 @@
 <?php
 
-test('the application returns a successful response', function () {
-    $response = $this->get('/');
+it('shows the home page with the project name', function () {
+    $this->get(route('home'))
+        ->assertOk()
+        ->assertSee('TurneroPro')
+        ->assertSee('Sistema de gestión de turnos');
+});
 
-    $response->assertStatus(200);
+it('shows the panel page', function () {
+    $this->get(route('panel'))
+        ->assertOk()
+        ->assertSee('Panel');
 });
