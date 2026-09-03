@@ -20,6 +20,7 @@
                     <div class="flex items-center gap-6 text-sm">
                         <a href="{{ route('home') }}" class="hover:underline">Inicio</a>
                         <a href="{{ route('panel') }}" class="hover:underline">Panel</a>
+                        <a href="{{ route('services.index') }}" class="hover:underline">Servicios</a>
                     </div>
                 </nav>
             </header>
