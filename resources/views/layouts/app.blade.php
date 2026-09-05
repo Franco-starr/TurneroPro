@@ -21,6 +21,7 @@
                         <a href="{{ route('home') }}" class="hover:underline">Inicio</a>
                         <a href="{{ route('panel') }}" class="hover:underline">Panel</a>
                         <a href="{{ route('services.index') }}" class="hover:underline">Servicios</a>
+                        <a href="{{ route('clients.index') }}" class="hover:underline">Clientes</a>
                     </div>
                 </nav>
             </header>
