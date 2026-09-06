@@ -209,3 +209,51 @@ it('shows the configured opening hours in the creation form', function () {
         ->assertSee('min="10:00"', false)
         ->assertSee('max="18:00"', false);
 });
+
+it('rejects an appointment that completely wraps an existing one', function () {
+    Appointment::factory()->create([
+        'fecha_hora' => '2026-09-10 10:00:00',
+        'service_id' => Service::factory()->create(['duration' => 30])->id,
+    ]);
+
+    $this->post(route('appointments.store'), [
+        'client_id' => Client::factory()->create()->id,
+        'service_id' => Service::factory()->create(['duration' => 90])->id,
+        'fecha' => '2026-09-10',
+        'hora' => '09:30',
+    ])->assertSessionHasErrors('fecha');
+
+    $this->assertDatabaseCount('appointments', 1);
+});
+
+it('rejects an appointment that starts exactly when an existing one starts', function () {
+    Appointment::factory()->create([
+        'fecha_hora' => '2026-09-10 10:00:00',
+        'service_id' => Service::factory()->create(['duration' => 30])->id,
+    ]);
+
+    $this->post(route('appointments.store'), [
+        'client_id' => Client::factory()->create()->id,
+        'service_id' => Service::factory()->create(['duration' => 30])->id,
+        'fecha' => '2026-09-10',
+        'hora' => '10:00',
+    ])->assertSessionHasErrors('fecha');
+
+    $this->assertDatabaseCount('appointments', 1);
+});
+
+it('allows an appointment that ends exactly when an existing one starts', function () {
+    Appointment::factory()->create([
+        'fecha_hora' => '2026-09-10 10:00:00',
+        'service_id' => Service::factory()->create(['duration' => 30])->id,
+    ]);
+
+    $this->post(route('appointments.store'), [
+        'client_id' => Client::factory()->create()->id,
+        'service_id' => Service::factory()->create(['duration' => 90])->id,
+        'fecha' => '2026-09-10',
+        'hora' => '08:30',
+    ])->assertRedirect(route('appointments.index'));
+
+    $this->assertDatabaseCount('appointments', 2);
+});
