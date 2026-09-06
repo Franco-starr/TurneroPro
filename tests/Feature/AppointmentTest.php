@@ -88,3 +88,100 @@ it('rejects an appointment with an invalid time', function () {
 
     $this->assertDatabaseCount('appointments', 0);
 });
+
+it('rejects an appointment that overlaps the start of an existing one', function () {
+    Appointment::factory()->create([
+        'fecha_hora' => '2026-09-10 10:00:00',
+        'service_id' => Service::factory()->create(['duration' => 30])->id,
+    ]);
+
+    $this->post(route('appointments.store'), [
+        'client_id' => Client::factory()->create()->id,
+        'service_id' => Service::factory()->create(['duration' => 30])->id,
+        'fecha' => '2026-09-10',
+        'hora' => '10:15',
+    ])->assertSessionHasErrors('fecha');
+
+    $this->assertDatabaseCount('appointments', 1);
+});
+
+it('rejects an appointment that overlaps the end of an existing one', function () {
+    Appointment::factory()->create([
+        'fecha_hora' => '2026-09-10 10:00:00',
+        'service_id' => Service::factory()->create(['duration' => 30])->id,
+    ]);
+
+    $this->post(route('appointments.store'), [
+        'client_id' => Client::factory()->create()->id,
+        'service_id' => Service::factory()->create(['duration' => 30])->id,
+        'fecha' => '2026-09-10',
+        'hora' => '09:45',
+    ])->assertSessionHasErrors('fecha');
+
+    $this->assertDatabaseCount('appointments', 1);
+});
+
+it('allows an appointment that starts exactly when another ends', function () {
+    Appointment::factory()->create([
+        'fecha_hora' => '2026-09-10 10:00:00',
+        'service_id' => Service::factory()->create(['duration' => 30])->id,
+    ]);
+
+    $this->post(route('appointments.store'), [
+        'client_id' => Client::factory()->create()->id,
+        'service_id' => Service::factory()->create(['duration' => 30])->id,
+        'fecha' => '2026-09-10',
+        'hora' => '10:30',
+    ])->assertRedirect(route('appointments.index'));
+
+    $this->assertDatabaseCount('appointments', 2);
+});
+
+it('rejects an appointment that overlaps an existing one from another service', function () {
+    Appointment::factory()->create([
+        'fecha_hora' => '2026-09-10 10:00:00',
+        'service_id' => Service::factory()->create(['duration' => 30])->id,
+    ]);
+
+    $this->post(route('appointments.store'), [
+        'client_id' => Client::factory()->create()->id,
+        'service_id' => Service::factory()->create(['name' => 'Otro servicio', 'duration' => 60])->id,
+        'fecha' => '2026-09-10',
+        'hora' => '10:15',
+    ])->assertSessionHasErrors('fecha');
+
+    $this->assertDatabaseCount('appointments', 1);
+});
+
+it('rejects an appointment before the opening time', function () {
+    $this->post(route('appointments.store'), [
+        'client_id' => Client::factory()->create()->id,
+        'service_id' => Service::factory()->create(['duration' => 30])->id,
+        'fecha' => '2026-09-10',
+        'hora' => '07:45',
+    ])->assertSessionHasErrors('hora');
+
+    $this->assertDatabaseCount('appointments', 0);
+});
+
+it('rejects an appointment that ends after the closing time', function () {
+    $this->post(route('appointments.store'), [
+        'client_id' => Client::factory()->create()->id,
+        'service_id' => Service::factory()->create(['duration' => 90])->id,
+        'fecha' => '2026-09-10',
+        'hora' => '22:15',
+    ])->assertSessionHasErrors('hora');
+
+    $this->assertDatabaseCount('appointments', 0);
+});
+
+it('allows an appointment that ends exactly at the closing time', function () {
+    $this->post(route('appointments.store'), [
+        'client_id' => Client::factory()->create()->id,
+        'service_id' => Service::factory()->create(['duration' => 30])->id,
+        'fecha' => '2026-09-10',
+        'hora' => '22:30',
+    ])->assertRedirect(route('appointments.index'));
+
+    $this->assertDatabaseCount('appointments', 1);
+});

@@ -72,6 +72,8 @@
                 name="hora"
                 id="hora"
                 value="{{ old('hora') }}"
+                min="{{ config('store.opening_time') }}"
+                max="{{ config('store.closing_time') }}"
                 class="w-full rounded-sm border border-[#19140035] px-3 py-2 text-sm dark:border-[#3E3E3A] dark:bg-[#111110]"
                 required
             >
