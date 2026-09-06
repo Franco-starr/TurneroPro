@@ -78,6 +78,16 @@ it('falls back to today when the date filter is invalid', function () {
         ->assertSee($turnoDeHoy->client->nombre.' '.$turnoDeHoy->client->apellido);
 });
 
+it('falls back to today when the selected date does not exist in the calendar', function () {
+    $turnoDeHoy = Appointment::factory()->create([
+        'fecha_hora' => Carbon::today()->setTime(9, 0),
+    ]);
+
+    $this->get(route('agenda', ['fecha' => '2026-02-31']))
+        ->assertOk()
+        ->assertSee($turnoDeHoy->client->nombre.' '.$turnoDeHoy->client->apellido);
+});
+
 it('links to the agenda from the panel', function () {
     $this->get(route('panel'))
         ->assertOk()

@@ -15,7 +15,11 @@ class AgendaController extends Controller
 
         if ($request->filled('fecha')) {
             $dia = $request->input('fecha');
-            if (is_string($dia) && preg_match('/^\d{4}-\d{2}-\d{2}$/', $dia) && Carbon::createFromFormat('Y-m-d', $dia)->format('Y-m-d') === $dia) {
+            if (
+                is_string($dia)
+                && preg_match('/^(?P<anio>\d{4})-(?P<mes>\d{2})-(?P<dia>\d{2})$/', $dia, $partes)
+                && checkdate((int) $partes['mes'], (int) $partes['dia'], (int) $partes['anio'])
+            ) {
                 $fecha = $dia;
             }
         }
