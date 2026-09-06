@@ -1,0 +1,90 @@
+<?php
+
+use App\Models\Appointment;
+use App\Models\Client;
+use App\Models\Service;
+
+it('lists the registered appointments with their client and service', function () {
+    $appointment = Appointment::factory()->create();
+
+    $this->get(route('appointments.index'))
+        ->assertOk()
+        ->assertSee($appointment->client->nombre.' '.$appointment->client->apellido)
+        ->assertSee($appointment->service->name)
+        ->assertSee($appointment->fecha_hora->format('d/m/Y'))
+        ->assertSee($appointment->fecha_hora->format('H:i'))
+        ->assertSee('Turnos');
+});
+
+it('shows the form to create an appointment', function () {
+    Client::factory()->create(['nombre' => 'Juan', 'apellido' => 'Pérez']);
+    Service::factory()->create(['name' => 'Corte']);
+
+    $this->get(route('appointments.create'))
+        ->assertOk()
+        ->assertSee('Nuevo Turno')
+        ->assertSee('Juan Pérez')
+        ->assertSee('Corte');
+});
+
+it('creates an appointment and redirects to the list', function () {
+    $client = Client::factory()->create();
+    $service = Service::factory()->create();
+
+    $this->post(route('appointments.store'), [
+        'client_id' => $client->id,
+        'service_id' => $service->id,
+        'fecha' => '2026-09-10',
+        'hora' => '15:00',
+    ])->assertRedirect(route('appointments.index'))->assertSessionHas('success');
+
+    $this->assertDatabaseHas('appointments', [
+        'client_id' => $client->id,
+        'service_id' => $service->id,
+        'fecha_hora' => '2026-09-10 15:00:00',
+    ]);
+});
+
+it('rejects an appointment without a client', function () {
+    $this->post(route('appointments.store'), [
+        'client_id' => '',
+        'service_id' => Service::factory()->create()->id,
+        'fecha' => '2026-09-10',
+        'hora' => '15:00',
+    ])->assertSessionHasErrors('client_id');
+
+    $this->assertDatabaseCount('appointments', 0);
+});
+
+it('rejects an appointment without a service', function () {
+    $this->post(route('appointments.store'), [
+        'client_id' => Client::factory()->create()->id,
+        'service_id' => '',
+        'fecha' => '2026-09-10',
+        'hora' => '15:00',
+    ])->assertSessionHasErrors('service_id');
+
+    $this->assertDatabaseCount('appointments', 0);
+});
+
+it('rejects an appointment with an invalid date', function () {
+    $this->post(route('appointments.store'), [
+        'client_id' => Client::factory()->create()->id,
+        'service_id' => Service::factory()->create()->id,
+        'fecha' => 'not-a-date',
+        'hora' => '15:00',
+    ])->assertSessionHasErrors('fecha');
+
+    $this->assertDatabaseCount('appointments', 0);
+});
+
+it('rejects an appointment with an invalid time', function () {
+    $this->post(route('appointments.store'), [
+        'client_id' => Client::factory()->create()->id,
+        'service_id' => Service::factory()->create()->id,
+        'fecha' => '2026-09-10',
+        'hora' => '25:99',
+    ])->assertSessionHasErrors('hora');
+
+    $this->assertDatabaseCount('appointments', 0);
+});

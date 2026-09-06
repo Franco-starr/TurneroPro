@@ -22,6 +22,7 @@
                         <a href="{{ route('panel') }}" class="hover:underline">Panel</a>
                         <a href="{{ route('services.index') }}" class="hover:underline">Servicios</a>
                         <a href="{{ route('clients.index') }}" class="hover:underline">Clientes</a>
+                        <a href="{{ route('appointments.index') }}" class="hover:underline">Turnos</a>
                     </div>
                 </nav>
             </header>
