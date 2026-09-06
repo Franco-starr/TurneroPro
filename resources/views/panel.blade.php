@@ -11,6 +11,10 @@
     </div>
 
     <div class="grid gap-4 sm:grid-cols-2">
+        <a href="{{ route('agenda') }}" class="rounded-sm border border-[#19140035] p-5 hover:bg-[#F1F1EF] dark:border-[#3E3E3A] dark:hover:bg-[#111110]">
+            <h2 class="text-lg font-semibold">Agenda</h2>
+            <p class="mt-1 text-sm text-[#706f6c] dark:text-[#A1A09A]">Ver el día de trabajo ordenado por hora.</p>
+        </a>
         <a href="{{ route('appointments.index') }}" class="rounded-sm border border-[#19140035] p-5 hover:bg-[#F1F1EF] dark:border-[#3E3E3A] dark:hover:bg-[#111110]">
             <h2 class="text-lg font-semibold">Turnos</h2>
             <p class="mt-1 text-sm text-[#706f6c] dark:text-[#A1A09A]">Ver y crear turnos.</p>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ServiceController;
@@ -18,6 +19,9 @@ Route::resource('clients', ClientController::class)->only(['index', 'create', 's
 
 // Rutas de turnos
 Route::resource('appointments', AppointmentController::class)->only(['index', 'create', 'store']);
+
+// Agenda diaria
+Route::get('agenda', [AgendaController::class, 'index'])->name('agenda');
 
 // Rutas de configuración del local
 Route::get('store-settings/edit', [StoreSettingController::class, 'edit'])->name('store-settings.edit');
