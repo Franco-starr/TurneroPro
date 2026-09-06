@@ -72,11 +72,14 @@
                 name="hora"
                 id="hora"
                 value="{{ old('hora') }}"
-                min="{{ config('store.opening_time') }}"
-                max="{{ config('store.closing_time') }}"
+                min="{{ $settings->opening_time ?? config('store.opening_time') }}"
+                max="{{ $settings->closing_time ?? config('store.closing_time') }}"
                 class="w-full rounded-sm border border-[#19140035] px-3 py-2 text-sm dark:border-[#3E3E3A] dark:bg-[#111110]"
                 required
             >
+            <p class="mt-1 text-xs text-[#706f6c] dark:text-[#A1A09A]">
+                Horario de atención: {{ $settings->opening_time ?? config('store.opening_time') }} a {{ $settings->closing_time ?? config('store.closing_time') }}
+            </p>
             @error('hora')
                 <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
             @enderror

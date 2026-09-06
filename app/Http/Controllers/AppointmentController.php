@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use App\Models\Client;
 use App\Models\Service;
+use App\Models\StoreSetting;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -24,8 +25,9 @@ class AppointmentController extends Controller
     {
         $clients = Client::orderBy('nombre')->get();
         $services = Service::orderBy('name')->get();
+        $settings = StoreSetting::first();
 
-        return view('appointments.create', compact('clients', 'services'));
+        return view('appointments.create', compact('clients', 'services', 'settings'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -41,12 +43,13 @@ class AppointmentController extends Controller
         $inicio = Carbon::parse($validated['fecha'].' '.$validated['hora']);
         $fin = $inicio->copy()->addMinutes($service->duration);
 
-        $apertura = Carbon::parse($validated['fecha'].' '.config('store.opening_time'));
-        $cierre = Carbon::parse($validated['fecha'].' '.config('store.closing_time'));
+        $settings = StoreSetting::first();
+        $apertura = Carbon::parse($validated['fecha'].' '.($settings->opening_time ?? config('store.opening_time')));
+        $cierre = Carbon::parse($validated['fecha'].' '.($settings->closing_time ?? config('store.closing_time')));
 
         if ($inicio->lt($apertura) || $fin->gt($cierre)) {
             throw ValidationException::withMessages([
-                'hora' => 'El turno debe estar dentro del horario de atención ('.config('store.opening_time').' a '.config('store.closing_time').').',
+                'hora' => 'El turno debe estar dentro del horario de atención ('.($settings->opening_time ?? config('store.opening_time')).' a '.($settings->closing_time ?? config('store.closing_time')).').',
             ]);
         }
 

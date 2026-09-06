@@ -3,6 +3,7 @@
 use App\Models\Appointment;
 use App\Models\Client;
 use App\Models\Service;
+use App\Models\StoreSetting;
 
 it('lists the registered appointments with their client and service', function () {
     $appointment = Appointment::factory()->create();
@@ -184,4 +185,27 @@ it('allows an appointment that ends exactly at the closing time', function () {
     ])->assertRedirect(route('appointments.index'));
 
     $this->assertDatabaseCount('appointments', 1);
+});
+
+it('enforces the opening time configured in the settings', function () {
+    StoreSetting::factory()->create(['opening_time' => '10:00', 'closing_time' => '18:00']);
+
+    $this->post(route('appointments.store'), [
+        'client_id' => Client::factory()->create()->id,
+        'service_id' => Service::factory()->create(['duration' => 30])->id,
+        'fecha' => '2026-09-10',
+        'hora' => '09:00',
+    ])->assertSessionHasErrors('hora');
+
+    $this->assertDatabaseCount('appointments', 0);
+});
+
+it('shows the configured opening hours in the creation form', function () {
+    StoreSetting::factory()->create(['opening_time' => '10:00', 'closing_time' => '18:00']);
+
+    $this->get(route('appointments.create'))
+        ->assertOk()
+        ->assertSee('Horario de atención: 10:00 a 18:00')
+        ->assertSee('min="10:00"', false)
+        ->assertSee('max="18:00"', false);
 });
