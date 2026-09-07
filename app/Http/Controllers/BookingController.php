@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\AppointmentStatus;
+use App\Mail\ReservaConfirmada;
 use App\Models\Appointment;
 use App\Models\Client;
 use App\Models\Service;
@@ -10,6 +11,7 @@ use App\Services\AvailabilityService;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
@@ -78,6 +80,12 @@ class BookingController extends Controller
             'fecha_hora' => $inicio,
             'status' => AppointmentStatus::Pending,
         ]);
+
+        try {
+            Mail::to($client->email)->send(new ReservaConfirmada($appointment));
+        } catch (\Throwable $e) {
+            report($e);
+        }
 
         return redirect()->route('reserva.confirmada')->with('reserva', [
             'servicio' => $service->name,
