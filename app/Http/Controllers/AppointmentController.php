@@ -7,6 +7,7 @@ use App\Models\Appointment;
 use App\Models\Client;
 use App\Models\Service;
 use App\Models\StoreSetting;
+use App\Services\AvailabilityService;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -15,6 +16,8 @@ use Illuminate\View\View;
 
 class AppointmentController extends Controller
 {
+    public function __construct(private readonly AvailabilityService $availability) {}
+
     public function index(): View
     {
         $appointments = Appointment::with(['client', 'service'])->latest()->get();
@@ -42,26 +45,16 @@ class AppointmentController extends Controller
 
         $service = Service::findOrFail($validated['service_id']);
         $inicio = Carbon::parse($validated['fecha'].' '.$validated['hora']);
-        $fin = $inicio->copy()->addMinutes($service->duration);
 
-        $settings = StoreSetting::first();
-        $apertura = Carbon::parse($validated['fecha'].' '.($settings->opening_time ?? config('store.opening_time')));
-        $cierre = Carbon::parse($validated['fecha'].' '.($settings->closing_time ?? config('store.closing_time')));
+        if (! $this->availability->isWithinBusinessHours($inicio, $service)) {
+            $settings = StoreSetting::first();
 
-        if ($inicio->lt($apertura) || $fin->gt($cierre)) {
             throw ValidationException::withMessages([
                 'hora' => 'El turno debe estar dentro del horario de atención ('.($settings->opening_time ?? config('store.opening_time')).' a '.($settings->closing_time ?? config('store.closing_time')).').',
             ]);
         }
 
-        $solapado = Appointment::with('service')
-            ->where('fecha_hora', '<', $fin)
-            ->get()
-            ->contains(fn (Appointment $appointment) => $appointment->fecha_hora->copy()
-                ->addMinutes($appointment->service->duration)
-                ->isAfter($inicio));
-
-        if ($solapado) {
+        if ($this->availability->isOverlapping($inicio, $service)) {
             throw ValidationException::withMessages([
                 'fecha' => 'Ese horario no está disponible.',
             ]);

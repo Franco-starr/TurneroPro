@@ -11,8 +11,14 @@
             </p>
         </div>
 
-        <a href="{{ route('panel') }}" class="rounded-sm bg-[#1b1b18] px-5 py-2 text-sm text-white dark:bg-[#eeeeec] dark:text-[#1C1C1A]">
-            Ir al Panel
-        </a>
+        @auth
+            <a href="{{ route('panel') }}" class="rounded-sm bg-[#1b1b18] px-5 py-2 text-sm text-white dark:bg-[#eeeeec] dark:text-[#1C1C1A]">
+                Ir al Panel
+            </a>
+        @else
+            <a href="{{ route('reservar') }}" class="rounded-sm bg-[#1b1b18] px-5 py-2 text-sm text-white dark:bg-[#eeeeec] dark:text-[#1C1C1A]">
+                Reservar un turno
+            </a>
+        @endauth
     </div>
 @endsection

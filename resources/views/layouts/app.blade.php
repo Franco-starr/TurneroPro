@@ -20,6 +20,7 @@
                     <div class="flex items-center gap-6 text-sm">
                         @auth
                             <a href="{{ route('home') }}" class="hover:underline">Inicio</a>
+                            <a href="{{ route('reservar') }}" class="hover:underline">Reservar</a>
                             <a href="{{ route('panel') }}" class="hover:underline">Panel</a>
                             <a href="{{ route('agenda') }}" class="hover:underline">Agenda</a>
                             <a href="{{ route('agenda.semanal') }}" class="hover:underline">Semana</a>
@@ -33,6 +34,7 @@
                             </form>
                         @else
                             <a href="{{ route('home') }}" class="hover:underline">Inicio</a>
+                            <a href="{{ route('reservar') }}" class="hover:underline">Reservar</a>
                             <a href="{{ route('login') }}" class="hover:underline">Ingresar</a>
                         @endauth
                     </div>

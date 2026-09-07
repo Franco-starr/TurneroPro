@@ -3,6 +3,7 @@
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\StoreSettingController;
@@ -11,6 +12,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('inicio');
 })->name('home');
+
+// Rutas públicas de reserva
+Route::get('reservar', [BookingController::class, 'index'])->name('reservar');
+Route::post('reservar', [BookingController::class, 'store'])->name('reserva.store');
+Route::get('reservar/confirmado', [BookingController::class, 'confirmada'])->name('reserva.confirmada');
 
 // Rutas de autenticación
 Route::middleware('guest')->group(function () {
