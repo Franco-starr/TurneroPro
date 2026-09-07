@@ -47,9 +47,11 @@
                                         {{ $appointment->fecha_hora->format('d/m/Y') }} · {{ $appointment->fecha_hora->format('H:i') }}
                                     </p>
                                 </div>
-                                <a href="{{ route('reserva.cancelar', $appointment->token) }}" class="text-sm text-red-600 hover:underline dark:text-red-400">
-                                    Cancelar turno
-                                </a>
+                                @if ($appointment->token)
+                                    <a href="{{ route('reserva.cancelar', $appointment->token) }}" class="text-sm text-red-600 hover:underline dark:text-red-400">
+                                        Cancelar turno
+                                    </a>
+                                @endif
                             </div>
                         @endforeach
                     </div>
