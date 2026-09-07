@@ -24,6 +24,7 @@
                     <th class="px-4 py-3">Apellido</th>
                     <th class="px-4 py-3">Teléfono</th>
                     <th class="px-4 py-3">Email</th>
+                    <th class="px-4 py-3">Acciones</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-[#19140035] dark:divide-[#3E3E3A]">
@@ -33,10 +34,14 @@
                         <td class="px-4 py-3">{{ $client->apellido }}</td>
                         <td class="px-4 py-3">{{ $client->telefono }}</td>
                         <td class="px-4 py-3">{{ $client->email }}</td>
+                        <td class="px-4 py-3">
+                            <a href="{{ route('clients.show', $client) }}" class="text-sm hover:underline">Ver</a>
+                            <a href="{{ route('clients.edit', $client) }}" class="ml-3 text-sm hover:underline">Editar</a>
+                        </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4" class="px-4 py-8 text-center text-[#706f6c] dark:text-[#A1A09A]">
+                        <td colspan="5" class="px-4 py-8 text-center text-[#706f6c] dark:text-[#A1A09A]">
                             No hay clientes registrados aún.
                         </td>
                     </tr>

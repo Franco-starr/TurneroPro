@@ -90,3 +90,19 @@ it('shows the authenticated user name and the logout action in the navigation', 
         ->assertSee('Administrador')
         ->assertSee('Cerrar sesión');
 });
+
+it('throttles repeated failed login attempts', function () {
+    $user = User::factory()->create(['password' => 'secret-password']);
+
+    foreach (range(1, 5) as $ignored) {
+        $this->post(route('login'), [
+            'email' => $user->email,
+            'password' => 'wrong-password',
+        ])->assertSessionHasErrors('email');
+    }
+
+    $this->post(route('login'), [
+        'email' => $user->email,
+        'password' => 'wrong-password',
+    ])->assertStatus(429);
+});

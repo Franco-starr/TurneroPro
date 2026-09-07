@@ -14,13 +14,13 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Rutas públicas de reserva
 Route::get('reservar', [BookingController::class, 'index'])->name('reservar');
-Route::post('reservar', [BookingController::class, 'store'])->name('reserva.store');
+Route::post('reservar', [BookingController::class, 'store'])->name('reserva.store')->middleware('throttle:reservas');
 Route::get('reservar/confirmado', [BookingController::class, 'confirmada'])->name('reserva.confirmada');
 
 // Rutas de autenticación
 Route::middleware('guest')->group(function () {
     Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
-    Route::post('login', [AuthController::class, 'login']);
+    Route::post('login', [AuthController::class, 'login'])->middleware('throttle:login');
 });
 
 Route::post('logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('services', ServiceController::class)->except('show');
 
     // Rutas de clientes
-    Route::resource('clients', ClientController::class)->only(['index', 'create', 'store']);
+    Route::resource('clients', ClientController::class)->only(['index', 'create', 'store', 'show', 'edit', 'update']);
 
     // Rutas de turnos
     Route::resource('appointments', AppointmentController::class)->only(['index', 'create', 'store']);

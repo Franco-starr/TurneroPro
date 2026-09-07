@@ -235,3 +235,29 @@ it('does not let a guest create appointment in the admin panel', function () {
 
     $this->assertDatabaseCount('appointments', 0);
 });
+
+it('throttles repeated booking submissions', function () {
+    foreach (range(1, 3) as $ignored) {
+        $this->post(route('reserva.store'), [
+            'nombre' => 'Franco',
+            'apellido' => 'Diaz',
+            'telefono' => '1160000000',
+            'email' => 'franco@example.com',
+            'service_id' => 9999,
+            'fecha' => $this->fechaFutura->toDateString(),
+            'hora' => '10:00',
+        ]);
+    }
+
+    $this->post(route('reserva.store'), [
+        'nombre' => 'Franco',
+        'apellido' => 'Diaz',
+        'telefono' => '1160000000',
+        'email' => 'franco@example.com',
+        'service_id' => 9999,
+        'fecha' => $this->fechaFutura->toDateString(),
+        'hora' => '10:00',
+    ])->assertStatus(429);
+
+    $this->assertDatabaseCount('appointments', 0);
+});
