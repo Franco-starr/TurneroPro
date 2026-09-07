@@ -134,3 +134,31 @@ it('rejects updating a client with invalid data', function () {
 
     $this->assertDatabaseHas('clients', ['id' => $client->id, 'nombre' => 'Juan']);
 });
+
+it('does not delete a client that has appointments', function () {
+    $client = Client::factory()->create(['nombre' => 'Juan']);
+    $otroCliente = Client::factory()->create(['nombre' => 'Laura']);
+
+    Appointment::factory()->create([
+        'client_id' => $client->id,
+        'service_id' => Service::factory()->create()->id,
+        'fecha_hora' => Carbon::today()->addDays(2)->setTime(10, 0),
+    ]);
+
+    $this->delete(route('clients.destroy', $client))
+        ->assertRedirect()
+        ->assertSessionHas('success');
+
+    $this->assertDatabaseHas('clients', ['id' => $client->id]);
+    $this->assertDatabaseHas('clients', ['id' => $otroCliente->id]);
+});
+
+it('deletes a client without appointments', function () {
+    $client = Client::factory()->create(['nombre' => 'Juan']);
+
+    $this->delete(route('clients.destroy', $client))
+        ->assertRedirect(route('clients.index'))
+        ->assertSessionHas('success');
+
+    $this->assertDatabaseMissing('clients', ['id' => $client->id]);
+});

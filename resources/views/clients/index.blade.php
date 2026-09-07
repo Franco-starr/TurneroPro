@@ -35,8 +35,20 @@
                         <td class="px-4 py-3">{{ $client->telefono }}</td>
                         <td class="px-4 py-3">{{ $client->email }}</td>
                         <td class="px-4 py-3">
-                            <a href="{{ route('clients.show', $client) }}" class="text-sm hover:underline">Ver</a>
-                            <a href="{{ route('clients.edit', $client) }}" class="ml-3 text-sm hover:underline">Editar</a>
+                            <div class="flex items-center gap-3">
+                                <a href="{{ route('clients.show', $client) }}" class="text-sm hover:underline">Ver</a>
+                                <a href="{{ route('clients.edit', $client) }}" class="text-sm hover:underline">Editar</a>
+
+                                @if ($client->appointments()->exists())
+                                    <span class="text-sm text-[#706f6c] dark:text-[#A1A09A]">Eliminar</span>
+                                @else
+                                    <form method="POST" action="{{ route('clients.destroy', $client) }}" onsubmit="return confirm('¿Eliminar este cliente?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-sm text-red-600 hover:underline dark:text-red-400">Eliminar</button>
+                                    </form>
+                                @endif
+                            </div>
                         </td>
                     </tr>
                 @empty

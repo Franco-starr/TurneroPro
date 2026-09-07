@@ -56,6 +56,18 @@ class ClientController extends Controller
             ->with('success', 'Cliente actualizado correctamente.');
     }
 
+    public function destroy(Client $client): RedirectResponse
+    {
+        if ($client->appointments()->exists()) {
+            return back()->with('success', 'No se puede eliminar: el cliente tiene turnos registrados.');
+        }
+
+        $client->delete();
+
+        return redirect()->route('clients.index')
+            ->with('success', 'Cliente eliminado correctamente.');
+    }
+
     /**
      * @return array<string, string>
      */

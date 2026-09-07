@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('services', ServiceController::class)->except('show');
 
     // Rutas de clientes
-    Route::resource('clients', ClientController::class)->only(['index', 'create', 'store', 'show', 'edit', 'update']);
+    Route::resource('clients', ClientController::class)->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy']);
 
     // Rutas de turnos
     Route::resource('appointments', AppointmentController::class)->only(['index', 'create', 'store']);
