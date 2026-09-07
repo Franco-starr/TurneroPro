@@ -27,6 +27,9 @@ Route::patch('appointments/{appointment}/cancel', [AppointmentController::class,
 // Agenda diaria
 Route::get('agenda', [AgendaController::class, 'index'])->name('agenda');
 
+// Agenda semanal
+Route::get('agenda-semanal', [AgendaController::class, 'semanal'])->name('agenda.semanal');
+
 // Rutas de configuración del local
 Route::get('store-settings/edit', [StoreSettingController::class, 'edit'])->name('store-settings.edit');
 Route::put('store-settings', [StoreSettingController::class, 'update'])->name('store-settings.update');
