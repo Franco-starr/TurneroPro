@@ -21,6 +21,21 @@
         @method('PUT')
 
         <div>
+            <label class="mb-1 block text-sm font-medium">Días de atención</label>
+            <div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                @foreach ([1 => 'Lunes', 2 => 'Martes', 3 => 'Miércoles', 4 => 'Jueves', 5 => 'Viernes', 6 => 'Sábado', 7 => 'Domingo'] as $valor => $etiqueta)
+                    <label class="flex cursor-pointer items-center gap-2 rounded-sm border border-[#19140035] px-3 py-2 text-sm dark:border-[#3E3E3A]">
+                        <input type="checkbox" name="days[]" value="{{ $valor }}" class="h-4 w-4" @checked(in_array($valor, old('days', $settings->days ?? config('store.days')), true))>
+                        {{ $etiqueta }}
+                    </label>
+                @endforeach
+            </div>
+            @error('days')
+                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <div>
             <label for="opening_time" class="mb-1 block text-sm font-medium">Apertura</label>
             <input
                 type="time"

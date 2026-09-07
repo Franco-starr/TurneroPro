@@ -78,6 +78,40 @@ it('shows a message when there are no slots for the chosen date', function () {
         ->assertSee('No hay horarios disponibles para la fecha seleccionada.');
 });
 
+it('shows no slots on a closed day', function () {
+    $cerrado = collect(range(1, 7))->reject(fn ($d) => $d === $this->fechaFutura->dayOfWeek)->all();
+    StoreSetting::factory()->create(['days' => $cerrado]);
+
+    $service = Service::factory()->create(['duration' => 30]);
+
+    $this->get(route('reservar', [
+        'service_id' => $service->id,
+        'fecha' => $this->fechaFutura->toDateString(),
+    ]))
+        ->assertOk()
+        ->assertDontSee('value="10:00"', false)
+        ->assertSee('No hay horarios disponibles para la fecha seleccionada.');
+});
+
+it('rejects booking on a closed day', function () {
+    $cerrado = collect(range(1, 7))->reject(fn ($d) => $d === $this->fechaFutura->dayOfWeek)->all();
+    StoreSetting::factory()->create(['days' => $cerrado]);
+
+    $service = Service::factory()->create(['duration' => 30]);
+
+    $this->post(route('reserva.store'), [
+        'nombre' => 'Franco',
+        'apellido' => 'Diaz',
+        'telefono' => '1160000000',
+        'email' => 'franco@example.com',
+        'service_id' => $service->id,
+        'fecha' => $this->fechaFutura->toDateString(),
+        'hora' => '10:00',
+    ])->assertSessionHasErrors('hora');
+
+    $this->assertDatabaseCount('appointments', 0);
+});
+
 it('rejects booking a past date', function () {
     $service = Service::factory()->create(['duration' => 30]);
 

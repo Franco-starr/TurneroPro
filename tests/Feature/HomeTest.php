@@ -22,9 +22,18 @@ it('shows the business hours stored in the database', function () {
     $this->get(route('home'))
         ->assertOk()
         ->assertSee('Horario de atención')
-        ->assertSee('Lunes a Domingo')
+        ->assertSee('Todos los días')
         ->assertSee('09:30')
         ->assertSee('19:00');
+});
+
+it('shows the opening days stored in the database', function () {
+    StoreSetting::factory()->create(['opening_time' => '09:00', 'closing_time' => '18:00', 'days' => [2, 4]]);
+
+    $this->get(route('home'))
+        ->assertOk()
+        ->assertSee('Horario de atención')
+        ->assertSee('Martes, Jueves');
 });
 
 it('falls back to the configured hours when there is no store setting', function () {

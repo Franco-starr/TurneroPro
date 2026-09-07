@@ -89,7 +89,13 @@
             <h2 class="mb-4 text-2xl font-bold">Horario de atención</h2>
 
             <div class="rounded-sm border border-[#19140035] p-5 dark:border-[#3E3E3A]">
-                <p class="text-sm">Lunes a Domingo</p>
+                @php
+                    $nombresDias = [1 => 'Lunes', 2 => 'Martes', 3 => 'Miércoles', 4 => 'Jueves', 5 => 'Viernes', 6 => 'Sábado', 7 => 'Domingo'];
+                    $diasTexto = count($horario['days']) === 7
+                        ? 'Todos los días'
+                        : collect($horario['days'])->map(fn ($d) => $nombresDias[$d])->implode(', ');
+                @endphp
+                <p class="text-sm">{{ $diasTexto }}</p>
                 <p class="mt-1 text-lg font-medium">{{ $horario['opening_time'] }} - {{ $horario['closing_time'] }}</p>
             </div>
         </section>

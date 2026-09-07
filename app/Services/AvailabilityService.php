@@ -12,8 +12,18 @@ class AvailabilityService
 {
     public function isSlotAvailable(Carbon $inicio, Service $service): bool
     {
-        return $this->isWithinBusinessHours($inicio, $service)
+        return $this->isOpenOn($inicio)
+            && $this->isWithinBusinessHours($inicio, $service)
             && ! $this->isOverlapping($inicio, $service);
+    }
+
+    public function isOpenOn(Carbon $fecha): bool
+    {
+        $settings = StoreSetting::first();
+
+        $days = $settings?->days ?: config('store.days');
+
+        return in_array($fecha->dayOfWeek, $days, true);
     }
 
     public function isWithinBusinessHours(Carbon $inicio, Service $service): bool
@@ -43,6 +53,10 @@ class AvailabilityService
      */
     public function availableSlotsFor(Service $service, Carbon $fecha, int $incrementMinutes = 30): array
     {
+        if (! $this->isOpenOn($fecha)) {
+            return [];
+        }
+
         [$apertura, $cierre] = $this->businessHours($fecha);
 
         $turnosDelDia = Appointment::with('service')

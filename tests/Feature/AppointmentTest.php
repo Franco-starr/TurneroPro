@@ -205,6 +205,19 @@ it('enforces the opening time configured in the settings', function () {
     $this->assertDatabaseCount('appointments', 0);
 });
 
+it('rejects an appointment on a closed day', function () {
+    StoreSetting::factory()->create(['days' => [1, 2, 3]]);
+
+    $this->post(route('appointments.store'), [
+        'client_id' => Client::factory()->create()->id,
+        'service_id' => Service::factory()->create(['duration' => 30])->id,
+        'fecha' => '2026-09-10',
+        'hora' => '15:00',
+    ])->assertSessionHasErrors('fecha');
+
+    $this->assertDatabaseCount('appointments', 0);
+});
+
 it('shows the configured opening hours in the creation form', function () {
     StoreSetting::factory()->create(['opening_time' => '10:00', 'closing_time' => '18:00']);
 

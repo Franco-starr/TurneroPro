@@ -14,5 +14,13 @@ class StoreSetting extends Model
     protected $fillable = [
         'opening_time',
         'closing_time',
+        'days',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'days' => 'array',
+        ];
+    }
 }

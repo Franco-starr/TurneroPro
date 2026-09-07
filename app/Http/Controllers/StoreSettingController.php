@@ -23,6 +23,8 @@ class StoreSettingController extends Controller
         $validated = $request->validate([
             'opening_time' => 'required|date_format:H:i',
             'closing_time' => 'required|date_format:H:i',
+            'days' => 'required|array|min:1',
+            'days.*' => 'integer|between:1,7',
         ]);
 
         $apertura = Carbon::parse($validated['opening_time']);

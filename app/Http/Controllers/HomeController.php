@@ -16,6 +16,7 @@ class HomeController extends Controller
         $horario = [
             'opening_time' => $settings->opening_time ?? config('store.opening_time'),
             'closing_time' => $settings->closing_time ?? config('store.closing_time'),
+            'days' => $settings?->days ?: config('store.days'),
         ];
 
         return view('inicio', compact('services', 'horario'));
