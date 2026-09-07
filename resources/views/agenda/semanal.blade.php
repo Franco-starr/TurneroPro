@@ -26,6 +26,30 @@
         </div>
     </div>
 
+    <div class="mb-6 flex flex-wrap items-center gap-3 text-sm">
+        <a href="{{ route('agenda.semanal', ['mes' => $mesAnterior]) }}" class="rounded-sm border border-[#19140035] px-4 py-2 hover:bg-[#F1F1EF] dark:border-[#3E3E3A] dark:hover:bg-[#111110]">
+            ← Mes anterior
+        </a>
+        <form method="GET" action="{{ route('agenda.semanal') }}" class="flex items-end gap-2">
+            <div>
+                <label for="mes" class="mb-1 block text-xs font-medium text-[#706f6c] dark:text-[#A1A09A]">Mes</label>
+                <input
+                    type="month"
+                    name="mes"
+                    id="mes"
+                    value="{{ $mesActual }}"
+                    class="rounded-sm border border-[#19140035] px-3 py-2 text-sm dark:border-[#3E3E3A] dark:bg-[#111110]"
+                >
+            </div>
+            <button type="submit" class="rounded-sm bg-[#1b1b18] px-4 py-2 text-white dark:bg-[#eeeeec] dark:text-[#1C1C1A]">
+                Ir al mes
+            </button>
+        </form>
+        <a href="{{ route('agenda.semanal', ['mes' => $mesSiguiente]) }}" class="rounded-sm border border-[#19140035] px-4 py-2 hover:bg-[#F1F1EF] dark:border-[#3E3E3A] dark:hover:bg-[#111110]">
+            Mes siguiente →
+        </a>
+    </div>
+
     <div class="overflow-x-auto rounded-sm border border-[#19140035] dark:border-[#3E3E3A]">
         <div class="flex min-w-max divide-x divide-[#19140035] dark:divide-[#3E3E3A]">
             @foreach ($dias as $dia)

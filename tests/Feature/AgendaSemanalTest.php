@@ -107,3 +107,42 @@ it('links to the weekly agenda from the panel and the navigation', function () {
         ->assertOk()
         ->assertSee('Semana');
 });
+
+it('navigates to another month showing its week', function () {
+    $turnoDeHoy = Appointment::factory()->create([
+        'fecha_hora' => Carbon::today()->setTime(10, 0),
+    ]);
+
+    $mesAnterior = Carbon::today()->startOfMonth()->subMonthNoOverflow();
+
+    $turnoDelMes = Appointment::factory()->create([
+        'fecha_hora' => $mesAnterior->copy()->setTime(10, 0),
+    ]);
+
+    $this->get(route('agenda.semanal', ['mes' => $mesAnterior->format('Y-m')]))
+        ->assertOk()
+        ->assertSee($turnoDelMes->client->nombre.' '.$turnoDelMes->client->apellido)
+        ->assertDontSee($turnoDeHoy->client->nombre.' '.$turnoDeHoy->client->apellido);
+});
+
+it('falls back to the current week when the mes filter is invalid', function () {
+    $turnoDeHoy = Appointment::factory()->create([
+        'fecha_hora' => Carbon::today()->setTime(10, 0),
+    ]);
+
+    $this->get(route('agenda.semanal', ['mes' => '2026-13']))
+        ->assertOk()
+        ->assertSee($turnoDeHoy->client->nombre.' '.$turnoDeHoy->client->apellido);
+
+    $this->get(route('agenda.semanal', ['mes' => 'not-a-month']))
+        ->assertOk()
+        ->assertSee($turnoDeHoy->client->nombre.' '.$turnoDeHoy->client->apellido);
+});
+
+it('renders the month navigation controls', function () {
+    $this->get(route('agenda.semanal'))
+        ->assertOk()
+        ->assertSee('Ir al mes')
+        ->assertSee('Mes anterior')
+        ->assertSee('Mes siguiente');
+});

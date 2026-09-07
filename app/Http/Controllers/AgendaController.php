@@ -39,7 +39,16 @@ class AgendaController extends Controller
     {
         $semana = Carbon::today();
 
-        if ($request->filled('semana')) {
+        if ($request->filled('mes')) {
+            $mes = $request->input('mes');
+            if (
+                is_string($mes)
+                && preg_match('/^(?P<anio>\d{4})-(?P<mes>\d{2})$/', $mes, $partes)
+                && checkdate((int) $partes['mes'], 1, (int) $partes['anio'])
+            ) {
+                $semana = Carbon::createFromDate((int) $partes['anio'], (int) $partes['mes'], 1);
+            }
+        } elseif ($request->filled('semana')) {
             $dia = $request->input('semana');
             if (
                 is_string($dia)
@@ -77,6 +86,9 @@ class AgendaController extends Controller
             'finSemana' => $inicioSemana->copy()->addDays(6),
             'semanaAnterior' => $inicioSemana->copy()->subWeek()->toDateString(),
             'semanaSiguiente' => $inicioSemana->copy()->addWeek()->toDateString(),
+            'mesActual' => $semana->format('Y-m'),
+            'mesAnterior' => $semana->copy()->startOfMonth()->subMonth()->format('Y-m'),
+            'mesSiguiente' => $semana->copy()->startOfMonth()->addMonth()->format('Y-m'),
             'franjaApertura' => $storeSetting?->opening_time,
             'franjaCierre' => $storeSetting?->closing_time,
         ]);
