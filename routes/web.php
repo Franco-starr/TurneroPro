@@ -20,6 +20,10 @@ Route::resource('clients', ClientController::class)->only(['index', 'create', 's
 // Rutas de turnos
 Route::resource('appointments', AppointmentController::class)->only(['index', 'create', 'store']);
 
+// Acciones rápidas de estado de turnos
+Route::patch('appointments/{appointment}/complete', [AppointmentController::class, 'complete'])->name('appointments.complete');
+Route::patch('appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
+
 // Agenda diaria
 Route::get('agenda', [AgendaController::class, 'index'])->name('agenda');
 

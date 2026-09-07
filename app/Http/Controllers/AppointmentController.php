@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\AppointmentStatus;
 use App\Models\Appointment;
 use App\Models\Client;
 use App\Models\Service;
@@ -74,5 +75,21 @@ class AppointmentController extends Controller
 
         return redirect()->route('appointments.index')
             ->with('success', 'Turno creado correctamente.');
+    }
+
+    public function complete(Appointment $appointment): RedirectResponse
+    {
+        $appointment->update(['status' => AppointmentStatus::Completed]);
+
+        return redirect()->route('agenda', ['fecha' => $appointment->fecha_hora->format('Y-m-d')])
+            ->with('success', 'Turno marcado como completado.');
+    }
+
+    public function cancel(Appointment $appointment): RedirectResponse
+    {
+        $appointment->update(['status' => AppointmentStatus::Cancelled]);
+
+        return redirect()->route('agenda', ['fecha' => $appointment->fecha_hora->format('Y-m-d')])
+            ->with('success', 'Turno cancelado.');
     }
 }

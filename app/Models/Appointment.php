@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\AppointmentStatus;
 use Database\Factories\AppointmentFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,6 +17,7 @@ class Appointment extends Model
         'client_id',
         'service_id',
         'fecha_hora',
+        'status',
     ];
 
     public function client(): BelongsTo
@@ -32,6 +34,7 @@ class Appointment extends Model
     {
         return [
             'fecha_hora' => 'datetime',
+            'status' => AppointmentStatus::class,
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\AppointmentStatus;
 use App\Models\Appointment;
 use App\Models\Client;
 use App\Models\Service;
@@ -23,6 +24,7 @@ class AppointmentFactory extends Factory
             'client_id' => Client::factory(),
             'service_id' => Service::factory(),
             'fecha_hora' => $this->faker->dateTimeBetween('now', '+1 month'),
+            'status' => AppointmentStatus::Pending,
         ];
     }
 }
