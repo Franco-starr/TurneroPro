@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\User;
+
 it('shows the home page with the project name', function () {
     $this->get(route('home'))
         ->assertOk()
@@ -8,6 +10,8 @@ it('shows the home page with the project name', function () {
 });
 
 it('shows the panel page', function () {
+    $this->actingAs(User::factory()->create());
+
     $this->get(route('panel'))
         ->assertOk()
         ->assertSee('Panel');

@@ -1,6 +1,11 @@
 <?php
 
 use App\Models\StoreSetting;
+use App\Models\User;
+
+beforeEach(function () {
+    $this->actingAs(User::factory()->create());
+});
 
 it('shows the form to edit the store hours with the current values', function () {
     StoreSetting::factory()->create(['opening_time' => '08:00', 'closing_time' => '23:00']);

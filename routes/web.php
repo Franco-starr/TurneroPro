@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\StoreSettingController;
@@ -11,27 +12,38 @@ Route::get('/', function () {
     return view('inicio');
 })->name('home');
 
-// Rutas de servicios
-Route::resource('services', ServiceController::class)->except('show');
+// Rutas de autenticación
+Route::middleware('guest')->group(function () {
+    Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('login', [AuthController::class, 'login']);
+});
 
-// Rutas de clientes
-Route::resource('clients', ClientController::class)->only(['index', 'create', 'store']);
+Route::post('logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
-// Rutas de turnos
-Route::resource('appointments', AppointmentController::class)->only(['index', 'create', 'store']);
+// Zona administrativa protegida
+Route::middleware('auth')->group(function () {
+    // Rutas de servicios
+    Route::resource('services', ServiceController::class)->except('show');
 
-// Acciones rápidas de estado de turnos
-Route::patch('appointments/{appointment}/complete', [AppointmentController::class, 'complete'])->name('appointments.complete');
-Route::patch('appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
+    // Rutas de clientes
+    Route::resource('clients', ClientController::class)->only(['index', 'create', 'store']);
 
-// Agenda diaria
-Route::get('agenda', [AgendaController::class, 'index'])->name('agenda');
+    // Rutas de turnos
+    Route::resource('appointments', AppointmentController::class)->only(['index', 'create', 'store']);
 
-// Agenda semanal
-Route::get('agenda-semanal', [AgendaController::class, 'semanal'])->name('agenda.semanal');
+    // Acciones rápidas de estado de turnos
+    Route::patch('appointments/{appointment}/complete', [AppointmentController::class, 'complete'])->name('appointments.complete');
+    Route::patch('appointments/{appointment}/cancel', [AppointmentController::class, 'cancel'])->name('appointments.cancel');
 
-// Rutas de configuración del local
-Route::get('store-settings/edit', [StoreSettingController::class, 'edit'])->name('store-settings.edit');
-Route::put('store-settings', [StoreSettingController::class, 'update'])->name('store-settings.update');
+    // Agenda diaria
+    Route::get('agenda', [AgendaController::class, 'index'])->name('agenda');
 
-Route::view('panel', 'panel')->name('panel');
+    // Agenda semanal
+    Route::get('agenda-semanal', [AgendaController::class, 'semanal'])->name('agenda.semanal');
+
+    // Rutas de configuración del local
+    Route::get('store-settings/edit', [StoreSettingController::class, 'edit'])->name('store-settings.edit');
+    Route::put('store-settings', [StoreSettingController::class, 'update'])->name('store-settings.update');
+
+    Route::view('panel', 'panel')->name('panel');
+});

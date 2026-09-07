@@ -4,7 +4,12 @@ use App\Enums\AppointmentStatus;
 use App\Models\Appointment;
 use App\Models\Client;
 use App\Models\Service;
+use App\Models\User;
 use Carbon\Carbon;
+
+beforeEach(function () {
+    $this->actingAs(User::factory()->create());
+});
 
 it('creates a new appointment as pending', function () {
     $this->post(route('appointments.store'), [

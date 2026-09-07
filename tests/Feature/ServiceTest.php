@@ -1,6 +1,11 @@
 <?php
 
 use App\Models\Service;
+use App\Models\User;
+
+beforeEach(function () {
+    $this->actingAs(User::factory()->create());
+});
 
 it('lists the registered services', function () {
     $service = Service::factory()->create(['name' => 'Corte de cabello']);

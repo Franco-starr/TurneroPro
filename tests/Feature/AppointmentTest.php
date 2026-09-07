@@ -4,6 +4,11 @@ use App\Models\Appointment;
 use App\Models\Client;
 use App\Models\Service;
 use App\Models\StoreSetting;
+use App\Models\User;
+
+beforeEach(function () {
+    $this->actingAs(User::factory()->create());
+});
 
 it('lists the registered appointments with their client and service', function () {
     $appointment = Appointment::factory()->create();

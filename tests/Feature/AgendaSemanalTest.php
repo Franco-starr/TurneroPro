@@ -3,7 +3,12 @@
 use App\Models\Appointment;
 use App\Models\Client;
 use App\Models\StoreSetting;
+use App\Models\User;
 use Carbon\Carbon;
+
+beforeEach(function () {
+    $this->actingAs(User::factory()->create());
+});
 
 it('shows the current week appointments by default', function () {
     $turno = Appointment::factory()->create([

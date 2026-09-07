@@ -1,6 +1,11 @@
 <?php
 
 use App\Models\Client;
+use App\Models\User;
+
+beforeEach(function () {
+    $this->actingAs(User::factory()->create());
+});
 
 it('lists the registered clients', function () {
     $client = Client::factory()->create(['nombre' => 'Juan', 'email' => 'juan@example.com']);

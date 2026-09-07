@@ -3,7 +3,12 @@
 use App\Models\Appointment;
 use App\Models\Client;
 use App\Models\Service;
+use App\Models\User;
 use Carbon\Carbon;
+
+beforeEach(function () {
+    $this->actingAs(User::factory()->create());
+});
 
 it('shows today appointments by default', function () {
     $appointment = Appointment::factory()->create([

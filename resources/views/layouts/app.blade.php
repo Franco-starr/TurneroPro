@@ -18,13 +18,23 @@
                         {{ config('app.name', 'TurneroPro') }}
                     </a>
                     <div class="flex items-center gap-6 text-sm">
-                        <a href="{{ route('home') }}" class="hover:underline">Inicio</a>
-                        <a href="{{ route('panel') }}" class="hover:underline">Panel</a>
-                        <a href="{{ route('agenda') }}" class="hover:underline">Agenda</a>
-                        <a href="{{ route('agenda.semanal') }}" class="hover:underline">Semana</a>
-                        <a href="{{ route('services.index') }}" class="hover:underline">Servicios</a>
-                        <a href="{{ route('clients.index') }}" class="hover:underline">Clientes</a>
-                        <a href="{{ route('appointments.index') }}" class="hover:underline">Turnos</a>
+                        @auth
+                            <a href="{{ route('home') }}" class="hover:underline">Inicio</a>
+                            <a href="{{ route('panel') }}" class="hover:underline">Panel</a>
+                            <a href="{{ route('agenda') }}" class="hover:underline">Agenda</a>
+                            <a href="{{ route('agenda.semanal') }}" class="hover:underline">Semana</a>
+                            <a href="{{ route('services.index') }}" class="hover:underline">Servicios</a>
+                            <a href="{{ route('clients.index') }}" class="hover:underline">Clientes</a>
+                            <a href="{{ route('appointments.index') }}" class="hover:underline">Turnos</a>
+                            <span class="text-[#706f6c] dark:text-[#A1A09A]">{{ auth()->user()->name }}</span>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <button type="submit" class="hover:underline">Cerrar sesión</button>
+                            </form>
+                        @else
+                            <a href="{{ route('home') }}" class="hover:underline">Inicio</a>
+                            <a href="{{ route('login') }}" class="hover:underline">Ingresar</a>
+                        @endauth
                     </div>
                 </nav>
             </header>
