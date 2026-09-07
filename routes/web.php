@@ -17,6 +17,12 @@ Route::get('reservar', [BookingController::class, 'index'])->name('reservar');
 Route::post('reservar', [BookingController::class, 'store'])->name('reserva.store')->middleware('throttle:reservas');
 Route::get('reservar/confirmado', [BookingController::class, 'confirmada'])->name('reserva.confirmada');
 
+// Búsqueda y cancelación pública de turnos
+Route::get('mi-turno', [BookingController::class, 'lookup'])->name('mi-turno');
+Route::post('mi-turno', [BookingController::class, 'search'])->name('mi-turno.buscar')->middleware('throttle:reservas');
+Route::get('reservar/{appointment:token}/cancelar', [BookingController::class, 'cancelar'])->name('reserva.cancelar');
+Route::delete('reservar/{appointment:token}', [BookingController::class, 'destroy'])->name('reserva.cancel');
+
 // Rutas de autenticación
 Route::middleware('guest')->group(function () {
     Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');

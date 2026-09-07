@@ -17,9 +17,14 @@
                     Ir al Panel
                 </a>
             @else
-                <a href="{{ route('reservar') }}" class="rounded-sm bg-[#1b1b18] px-6 py-2.5 text-sm text-white dark:bg-[#eeeeec] dark:text-[#1C1C1A]">
-                    Reservar un turno
-                </a>
+                <div class="flex flex-col items-start gap-2">
+                    <a href="{{ route('reservar') }}" class="rounded-sm bg-[#1b1b18] px-6 py-2.5 text-sm text-white dark:bg-[#eeeeec] dark:text-[#1C1C1A]">
+                        Reservar un turno
+                    </a>
+                    <a href="{{ route('mi-turno') }}" class="text-sm text-[#706f6c] hover:underline dark:text-[#A1A09A]">
+                        ¿Ya tenés un turno?
+                    </a>
+                </div>
             @endauth
         </section>
 

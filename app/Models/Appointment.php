@@ -7,6 +7,7 @@ use Database\Factories\AppointmentFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 
 class Appointment extends Model
 {
@@ -18,7 +19,13 @@ class Appointment extends Model
         'service_id',
         'fecha_hora',
         'status',
+        'token',
     ];
+
+    protected static function booted(): void
+    {
+        static::creating(fn (Appointment $appointment) => $appointment->token ??= (string) Str::uuid());
+    }
 
     public function client(): BelongsTo
     {

@@ -15,9 +15,14 @@
                 <p><span class="text-[#706f6c] dark:text-[#A1A09A]">Hora:</span> <span class="font-medium">{{ $reserva['hora'] }}</span></p>
                 <p><span class="text-[#706f6c] dark:text-[#A1A09A]">Cliente:</span> <span class="font-medium">{{ $reserva['cliente'] }}</span></p>
             </div>
-            <a href="{{ route('reservar') }}" class="mt-6 inline-block rounded-sm bg-[#1b1b18] px-5 py-2 text-sm text-white hover:bg-[#354735] dark:bg-[#eeeeec] dark:text-[#1C1C1A]">
-                Reservar otro turno
-            </a>
+            <div class="mt-6 flex flex-wrap items-center gap-4">
+                <a href="{{ route('reservar') }}" class="rounded-sm bg-[#1b1b18] px-5 py-2 text-sm text-white hover:bg-[#354735] dark:bg-[#eeeeec] dark:text-[#1C1C1A]">
+                    Reservar otro turno
+                </a>
+                <a href="{{ route('reserva.cancelar', $reserva['token']) }}" class="text-sm text-red-600 hover:underline dark:text-red-400">
+                    Cancelar mi turno
+                </a>
+            </div>
         @else
             <p class="mt-6 text-sm text-[#706f6c] dark:text-[#A1A09A]">No hay una reserva reciente para mostrar.</p>
             <a href="{{ route('reservar') }}" class="mt-4 inline-block text-sm hover:underline">Volver a reservar</a>

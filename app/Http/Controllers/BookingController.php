@@ -85,13 +85,70 @@ class BookingController extends Controller
             'fecha' => $inicio->format('d/m/Y'),
             'hora' => $inicio->format('H:i'),
             'cliente' => $client->nombre.' '.$client->apellido,
-            'id' => $appointment->id,
+            'token' => $appointment->token,
         ]);
     }
 
     public function confirmada(): View
     {
         return view('reservar.confirmada');
+    }
+
+    public function lookup(): View
+    {
+        return view('mi-turno');
+    }
+
+    public function search(Request $request): View
+    {
+        $validated = $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        $client = Client::where('email', $validated['email'])->first();
+
+        $appointments = $client
+            ? $client->appointments()
+                ->with('service')
+                ->where('fecha_hora', '>', Carbon::now())
+                ->where('status', AppointmentStatus::Pending)
+                ->orderBy('fecha_hora')
+                ->get()
+            : collect();
+
+        return view('mi-turno', [
+            'email' => $validated['email'],
+            'appointments' => $appointments,
+        ]);
+    }
+
+    public function cancelar(Appointment $appointment): View|RedirectResponse
+    {
+        if (! $this->canBeCancelled($appointment)) {
+            return redirect()->route('home')
+                ->with('info', 'Este turno ya no se puede cancelar.');
+        }
+
+        return view('reservar.cancelar', compact('appointment'));
+    }
+
+    public function destroy(Appointment $appointment): RedirectResponse
+    {
+        if (! $this->canBeCancelled($appointment)) {
+            return redirect()->route('home')
+                ->with('info', 'Este turno ya no se puede cancelar.');
+        }
+
+        $appointment->update(['status' => AppointmentStatus::Cancelled]);
+
+        return redirect()->route('home')
+            ->with('success', 'Tu turno fue cancelado correctamente.');
+    }
+
+    private function canBeCancelled(Appointment $appointment): bool
+    {
+        return $appointment->status === AppointmentStatus::Pending
+            && $appointment->fecha_hora->isFuture();
     }
 
     private function isValidFutureDate(string $fecha): bool
