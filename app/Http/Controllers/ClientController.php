@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class ClientController extends Controller
 {
     public function index(): View
     {
-        $clients = Client::latest()->get();
+        $clients = Client::withCount('appointments')->latest()->get();
 
         return view('clients.index', compact('clients'));
     }
@@ -48,7 +49,7 @@ class ClientController extends Controller
 
     public function update(Request $request, Client $client): RedirectResponse
     {
-        $validated = $this->validated($request);
+        $validated = $this->validated($request, $client);
 
         $client->update($validated);
 
@@ -71,13 +72,13 @@ class ClientController extends Controller
     /**
      * @return array<string, string>
      */
-    private function validated(Request $request): array
+    private function validated(Request $request, ?Client $client = null): array
     {
         return $request->validate([
             'nombre' => 'required|string|max:255',
             'apellido' => 'required|string|max:255',
             'telefono' => 'required|string|max:30',
-            'email' => 'required|email|max:255',
+            'email' => ['required', 'email', 'max:255', Rule::unique('clients', 'email')->ignore($client?->id)],
         ]);
     }
 }

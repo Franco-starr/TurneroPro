@@ -1,7 +1,10 @@
 <?php
 
+use App\Models\Appointment;
+use App\Models\Client;
 use App\Models\Service;
 use App\Models\User;
+use Carbon\Carbon;
 
 beforeEach(function () {
     $this->actingAs(User::factory()->create());
@@ -100,4 +103,22 @@ it('deletes a service and redirects to the list', function () {
         ->assertSessionHas('success');
 
     $this->assertDatabaseMissing('services', ['id' => $service->id]);
+});
+
+it('does not delete a service that has appointments', function () {
+    $service = Service::factory()->create();
+    $otroServicio = Service::factory()->create(['name' => 'Barba']);
+
+    Appointment::factory()->create([
+        'client_id' => Client::factory()->create()->id,
+        'service_id' => $service->id,
+        'fecha_hora' => Carbon::today()->addDays(2)->setTime(10, 0),
+    ]);
+
+    $this->delete(route('services.destroy', $service))
+        ->assertRedirect()
+        ->assertSessionHas('success');
+
+    $this->assertDatabaseHas('services', ['id' => $service->id]);
+    $this->assertDatabaseHas('services', ['id' => $otroServicio->id]);
 });

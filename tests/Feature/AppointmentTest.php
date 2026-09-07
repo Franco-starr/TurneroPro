@@ -5,6 +5,7 @@ use App\Models\Client;
 use App\Models\Service;
 use App\Models\StoreSetting;
 use App\Models\User;
+use Carbon\Carbon;
 
 beforeEach(function () {
     $this->actingAs(User::factory()->create());
@@ -91,6 +92,17 @@ it('rejects an appointment with an invalid time', function () {
         'fecha' => '2026-09-10',
         'hora' => '25:99',
     ])->assertSessionHasErrors('hora');
+
+    $this->assertDatabaseCount('appointments', 0);
+});
+
+it('rejects an appointment in the past', function () {
+    $this->post(route('appointments.store'), [
+        'client_id' => Client::factory()->create()->id,
+        'service_id' => Service::factory()->create(['duration' => 30])->id,
+        'fecha' => Carbon::yesterday()->toDateString(),
+        'hora' => '10:00',
+    ])->assertSessionHasErrors('fecha');
 
     $this->assertDatabaseCount('appointments', 0);
 });

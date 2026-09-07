@@ -46,6 +46,12 @@ class AppointmentController extends Controller
         $service = Service::findOrFail($validated['service_id']);
         $inicio = Carbon::parse($validated['fecha'].' '.$validated['hora']);
 
+        if ($inicio->lt(Carbon::now())) {
+            throw ValidationException::withMessages([
+                'fecha' => 'No se puede crear un turno en el pasado.',
+            ]);
+        }
+
         if (! $this->availability->isOpenOn($inicio)) {
             throw ValidationException::withMessages([
                 'fecha' => 'El local no atiende ese día.',

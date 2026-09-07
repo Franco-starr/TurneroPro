@@ -35,11 +35,16 @@
                         <td class="px-4 py-3 text-right">
                             <div class="inline-flex items-center gap-3 text-sm">
                                 <a href="{{ route('services.edit', $service) }}" class="hover:underline">Editar</a>
-                                <form method="POST" action="{{ route('services.destroy', $service) }}" onsubmit="return confirm('¿Eliminar este servicio?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:underline dark:text-red-400">Eliminar</button>
-                                </form>
+
+                                @if ($service->appointments_count)
+                                    <span class="text-[#706f6c] dark:text-[#A1A09A]">Eliminar</span>
+                                @else
+                                    <form method="POST" action="{{ route('services.destroy', $service) }}" onsubmit="return confirm('¿Eliminar este servicio?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:underline dark:text-red-400">Eliminar</button>
+                                    </form>
+                                @endif
                             </div>
                         </td>
                     </tr>

@@ -39,7 +39,7 @@
                                 <a href="{{ route('clients.show', $client) }}" class="text-sm hover:underline">Ver</a>
                                 <a href="{{ route('clients.edit', $client) }}" class="text-sm hover:underline">Editar</a>
 
-                                @if ($client->appointments()->exists())
+                                @if ($client->appointments_count)
                                     <span class="text-sm text-[#706f6c] dark:text-[#A1A09A]">Eliminar</span>
                                 @else
                                     <form method="POST" action="{{ route('clients.destroy', $client) }}" onsubmit="return confirm('¿Eliminar este cliente?')">

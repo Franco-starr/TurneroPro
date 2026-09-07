@@ -20,7 +20,7 @@ class ServiceController extends Controller
     public function index(): View
     {
         // Obtiene todos los servicios ordenados por fecha de creación descendente (created_at)
-        $services = Service::latest()->get();
+        $services = Service::withCount('appointments')->latest()->get();
 
         // Renderiza la vista 'services.index' pasando la colección de servicios
         return view('services.index', compact('services'));
@@ -96,6 +96,10 @@ class ServiceController extends Controller
      */
     public function destroy(Service $service): RedirectResponse
     {
+        if ($service->appointments()->exists()) {
+            return back()->with('success', 'No se puede eliminar: el servicio tiene turnos registrados.');
+        }
+
         // Eliminación física del registro
         $service->delete();
 

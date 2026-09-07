@@ -64,6 +64,19 @@ it('rejects a client with an invalid email', function () {
     $this->assertDatabaseCount('clients', 0);
 });
 
+it('rejects a duplicated email when creating a client', function () {
+    Client::factory()->create(['email' => 'juan@example.com']);
+
+    $this->post(route('clients.store'), [
+        'nombre' => 'Juan',
+        'apellido' => 'Pérez',
+        'telefono' => '1122334455',
+        'email' => 'juan@example.com',
+    ])->assertSessionHasErrors('email');
+
+    $this->assertDatabaseCount('clients', 1);
+});
+
 it('shows the client details with its appointment history', function () {
     $client = Client::factory()->create(['nombre' => 'Juan', 'apellido' => 'Pérez']);
 
@@ -133,6 +146,19 @@ it('rejects updating a client with invalid data', function () {
     ])->assertSessionHasErrors(['nombre', 'apellido', 'telefono', 'email']);
 
     $this->assertDatabaseHas('clients', ['id' => $client->id, 'nombre' => 'Juan']);
+});
+
+it('allows updating a client keeping the same email', function () {
+    $client = Client::factory()->create(['email' => 'juan@example.com']);
+
+    $this->put(route('clients.update', $client), [
+        'nombre' => 'Juan Pablo',
+        'apellido' => 'Pérez',
+        'telefono' => '1199999999',
+        'email' => 'juan@example.com',
+    ])->assertRedirect(route('clients.index'));
+
+    $this->assertDatabaseHas('clients', ['id' => $client->id, 'nombre' => 'Juan Pablo']);
 });
 
 it('does not delete a client that has appointments', function () {
