@@ -1,58 +1,125 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# TurneroPro 📅
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistema de gestión de turnos para negocios: reserva online, confirmación por email y un panel de administración para gestionar servicios, clientes y la agenda diaria y semanal.
 
-## About Laravel
+> Proyecto de portafolio construido con [Laravel](https://laravel.com), [Tailwind CSS](https://tailwindcss.com), [SQLite](https://www.sqlite.org) y [Pest](https://pestphp.com).
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## ✨ Funcionalidades
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Para el público
+- **Reserva online sin registrarse**: elegí servicio, fecha, horario y dejá tus datos.
+- **Confirmación por email**: al reservar se envía un correo (markdown) con el detalle del turno y un botón para cancelarlo.
+- **"Mi turno"**: buscá tus turnos con tu email y cancelalos con un solo clic.
+- **Landing pública**: servicios, horarios de atención y preguntas frecuentes.
+- **Días y horarios de atención configurables**: los horarios solo se ofrecen en días hábiles dentro del horario del local.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Panel de administración (requiere login)
+- **Dashboard con KPIs**: turnos de hoy, pendientes, clientes y servicios.
+- **Agenda diaria**: turnos ordenados por hora con acciones de completar/cancelar.
+- **Agenda semanal**: vista de la semana por columnas (y apilada en móvil), con días cerrados resaltados.
+- **CRUD de servicios, clientes y turnos**, con protección para no borrar datos en uso.
+- **Configuración del local**: horario de apertura/cierre y días de atención.
+- **Protección de rutas** con autenticación y **rate limiting** en reservas y login.
+- **Diseño responsive** con dark mode.
 
-## Learning Laravel
+## 🖼️ Capturas
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+_Agregá capturas de pantalla en `docs/` y referencialas acá, por ejemplo:_
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- `docs/inicio.png`
+- `docs/panel.png`
+- `docs/agenda.png`
+- `docs/reserva.png`
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+```
+![Inicio](docs/inicio.png)
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+## 🚀 Requisitos
 
-## Contributing
+- PHP **8.3+**
+- Composer
+- Node.js + npm
+- SQLite (incluido en PHP)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 📦 Instalación
 
-## Code of Conduct
+```bash
+# 1. Cloná el repositorio
+git clone https://github.com/tu-usuario/turneropro.git
+cd turneropro
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# 2. Instalá las dependencias de PHP
+composer install
 
-## Security Vulnerabilities
+# 3. Configurá el entorno
+cp .env.example .env
+php artisan key:generate
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# 4. Creá la base de datos SQLite
+# En Windows: New-Item database\database.sqlite
+php artisan migrate --seed
 
-## License
+# 5. Instalá y compilá los assets frontend
+npm install
+npm run build
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# 6. Levantá el servidor
+php artisan serve
+```
+
+Abrí `http://localhost:8000` en tu navegador.
+
+### Credenciales de demo
+
+El seeder carga el usuario administrador:
+
+- **Email:** `test@example.com`
+- **Contraseña:** (definida en `UserFactory`, el valor por defecto de Laravel)
+
+> También se crean 4 servicios, 3 clientes y turnos de ejemplo para ver el proyecto lleno de datos.
+
+## 🧪 Tests
+
+```bash
+php artisan test
+```
+
+El proyecto incluye **124 tests / 422 aserciones** cubriendo: reserva pública, cancelación, confirmación por email, agenda diaria y semanal, CRUD de servicios/clientes/turnos, configuración del local, autenticación, rate limiting y días de atención.
+
+## 🗂️ Estructura del proyecto
+
+```
+app/
+├── Enums/                  # AppointmentStatus
+├── Http/Controllers/       # Booking, Agenda, Service, Client, Appointment, Auth, Panel...
+├── Mail/                   # ReservaConfirmada (email de confirmación)
+├── Models/                 # Appointment, Client, Service, StoreSetting
+└── Services/               # AvailabilityService (disponibilidad y solapamientos)
+database/
+├── factories/              # Factories para tests y seeders
+└── seeders/                # StoreSettingSeeder + DemoDataSeeder
+resources/views/            # Vistas Blade (públicas y panel)
+routes/web.php              # Definición de rutas
+tests/                      # Suite Pest (Feature + Unit)
+```
+
+## 🚀 Deploy (checklist)
+
+1. En `.env`: `APP_ENV=production`, `APP_DEBUG=false`, configurá `APP_URL` con tu dominio, `SESSION_SECURE_COOKIE=true` y un **SMTP real** para los emails de confirmación.
+2. Instalá dependencias sin dev: `composer install --no-dev --optimize-autoloader`.
+3. Migrá la base: `php artisan migrate --force`.
+4. Compilá los assets: `npm ci && npm run build` (el directorio `public/build` **no viaja** en el repo, porque está en `.gitignore`).
+5. Cacheá: `php artisan config:cache`, `route:cache`, `view:cache`.
+6. Creá el enlace de storage si usás archivos: `php artisan storage:link`.
+
+## 🛠️ Stack técnico
+
+- **Backend:** Laravel 13 (PHP 8.3+), Eloquent, Blade, rate limiting.
+- **Frontend:** Tailwind CSS 4, Vite 8.
+- **Base de datos:** SQLite (ideal para portafolio y demo).
+- **Testing:** Pest 5.
+
+## 📄 Licencia
+
+[MIT](https://opensource.org/licenses/MIT)
