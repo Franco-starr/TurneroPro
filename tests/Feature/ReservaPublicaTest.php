@@ -78,8 +78,27 @@ it('shows a message when there are no slots for the chosen date', function () {
         ->assertSee('No hay horarios disponibles para la fecha seleccionada.');
 });
 
+it('shows slots after the store schedule is saved with string days', function () {
+    $this->actingAs(User::factory()->create());
+
+    $this->put(route('store-settings.update'), [
+        'opening_time' => '08:00',
+        'closing_time' => '20:00',
+        'days' => ['1', '2', '3', '4', '5', '6', '7'],
+    ])->assertRedirect(route('store-settings.edit'));
+
+    $service = Service::factory()->create(['duration' => 30]);
+
+    $this->get(route('reservar', [
+        'service_id' => $service->id,
+        'fecha' => $this->fechaFutura->toDateString(),
+    ]))
+        ->assertOk()
+        ->assertSee('value="10:00"', false);
+});
+
 it('shows no slots on a closed day', function () {
-    $cerrado = collect(range(1, 7))->reject(fn ($d) => $d === $this->fechaFutura->dayOfWeek)->all();
+    $cerrado = collect(range(1, 7))->reject(fn ($d) => $d === $this->fechaFutura->dayOfWeekIso)->all();
     StoreSetting::factory()->create(['days' => $cerrado]);
 
     $service = Service::factory()->create(['duration' => 30]);
@@ -94,7 +113,7 @@ it('shows no slots on a closed day', function () {
 });
 
 it('rejects booking on a closed day', function () {
-    $cerrado = collect(range(1, 7))->reject(fn ($d) => $d === $this->fechaFutura->dayOfWeek)->all();
+    $cerrado = collect(range(1, 7))->reject(fn ($d) => $d === $this->fechaFutura->dayOfWeekIso)->all();
     StoreSetting::factory()->create(['days' => $cerrado]);
 
     $service = Service::factory()->create(['duration' => 30]);

@@ -27,6 +27,8 @@ class StoreSettingController extends Controller
             'days.*' => 'integer|between:1,7',
         ]);
 
+        $validated['days'] = array_map('intval', $validated['days']);
+
         $apertura = Carbon::parse($validated['opening_time']);
         $cierre = Carbon::parse($validated['closing_time']);
 

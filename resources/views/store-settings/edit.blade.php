@@ -25,7 +25,7 @@
             <div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
                 @foreach ([1 => 'Lunes', 2 => 'Martes', 3 => 'Miércoles', 4 => 'Jueves', 5 => 'Viernes', 6 => 'Sábado', 7 => 'Domingo'] as $valor => $etiqueta)
                     <label class="flex cursor-pointer items-center gap-2 rounded-sm border border-[#19140035] px-3 py-2 text-sm dark:border-[#3E3E3A]">
-                        <input type="checkbox" name="days[]" value="{{ $valor }}" class="h-4 w-4" @checked(in_array($valor, old('days', $settings->days ?? config('store.days')), true))>
+                        <input type="checkbox" name="days[]" value="{{ $valor }}" class="h-4 w-4" @checked(in_array($valor, array_map('intval', old('days', $settings->days ?? config('store.days'))), true))>
                         {{ $etiqueta }}
                     </label>
                 @endforeach

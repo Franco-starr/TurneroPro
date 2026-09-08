@@ -23,7 +23,7 @@ class AvailabilityService
 
         $days = $settings?->days ?: config('store.days');
 
-        return in_array($fecha->dayOfWeek, $days, true);
+        return in_array($fecha->dayOfWeekIso, array_map('intval', $days), true);
     }
 
     public function isWithinBusinessHours(Carbon $inicio, Service $service): bool

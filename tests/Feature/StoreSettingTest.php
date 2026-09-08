@@ -23,7 +23,7 @@ it('updates the store hours and redirects to the form', function () {
     $this->put(route('store-settings.update'), [
         'opening_time' => '09:00',
         'closing_time' => '20:00',
-        'days' => [1, 2, 3, 4, 5],
+        'days' => ['1', '2', '3', '4', '5'],
     ])->assertRedirect(route('store-settings.edit'))->assertSessionHas('success');
 
     $this->assertDatabaseHas('store_settings', [
@@ -37,7 +37,7 @@ it('creates the settings row when none exists yet', function () {
     $this->put(route('store-settings.update'), [
         'opening_time' => '09:00',
         'closing_time' => '20:00',
-        'days' => [1, 2, 3, 4, 5],
+        'days' => ['1', '2', '3', '4', '5'],
     ])->assertRedirect(route('store-settings.edit'));
 
     $this->assertDatabaseCount('store_settings', 1);

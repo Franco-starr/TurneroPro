@@ -24,16 +24,21 @@ Sistema de gestión de turnos para negocios: reserva online, confirmación por e
 
 ## 🖼️ Capturas
 
-_Agregá capturas de pantalla en `docs/` y referencialas acá, por ejemplo:_
+### Inicio
 
-- `docs/inicio.png`
-- `docs/panel.png`
-- `docs/agenda.png`
-- `docs/reserva.png`
-
-```
 ![Inicio](docs/inicio.png)
-```
+
+### Panel de administración
+
+![Panel](docs/panel.png)
+
+### Agenda semanal
+
+![Agenda](docs/agenda.png)
+
+### Reserva online
+
+![Reserva](docs/reservar.png)
 
 ## 🚀 Requisitos
 
