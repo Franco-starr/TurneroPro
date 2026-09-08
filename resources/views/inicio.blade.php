@@ -13,12 +13,12 @@
             </div>
 
             @auth
-                <a href="{{ route('panel') }}" class="rounded-sm bg-[#1b1b18] px-6 py-2.5 text-sm text-white dark:bg-[#eeeeec] dark:text-[#1C1C1A]">
+                <a href="{{ route('panel') }}" class="rounded-sm bg-green-600 px-6 py-2.5 text-sm text-white hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 dark:text-white">
                     Ir al Panel
                 </a>
             @else
                 <div class="flex flex-col items-start gap-2">
-                    <a href="{{ route('reservar') }}" class="rounded-sm bg-[#1b1b18] px-6 py-2.5 text-sm text-white dark:bg-[#eeeeec] dark:text-[#1C1C1A]">
+                    <a href="{{ route('reservar') }}" class="rounded-sm bg-green-600 px-6 py-2.5 text-sm text-white hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 dark:text-white">
                         Reservar un turno
                     </a>
                     <a href="{{ route('mi-turno') }}" class="text-sm text-[#706f6c] hover:underline dark:text-[#A1A09A]">
@@ -39,7 +39,7 @@
                             {{ $service->duration }} min · ${{ number_format($service->price, 0, ',', '.') }}
                         </p>
                         <a href="{{ route('reservar', ['service_id' => $service->id]) }}"
-                            class="mt-4 rounded-sm bg-[#1b1b18] px-4 py-2 text-center text-sm text-white dark:bg-[#eeeeec] dark:text-[#1C1C1A]">
+                            class="mt-4 rounded-sm bg-green-600 px-4 py-2 text-center text-sm text-white hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 dark:text-white">
                             Reservar
                         </a>
                     </div>
@@ -123,12 +123,12 @@
         <section class="flex flex-col items-center gap-4 pb-4 text-center">
             @auth
                 <p class="text-lg font-semibold">¿Listo para administrar tus turnos?</p>
-                <a href="{{ route('panel') }}" class="rounded-sm bg-[#1b1b18] px-6 py-2.5 text-sm text-white dark:bg-[#eeeeec] dark:text-[#1C1C1A]">
+                <a href="{{ route('panel') }}" class="rounded-sm bg-green-600 px-6 py-2.5 text-sm text-white hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 dark:text-white">
                     Ir al Panel
                 </a>
             @else
                 <p class="text-lg font-semibold">¿Listo para reservar?</p>
-                <a href="{{ route('reservar') }}" class="rounded-sm bg-[#1b1b18] px-6 py-2.5 text-sm text-white dark:bg-[#eeeeec] dark:text-[#1C1C1A]">
+                <a href="{{ route('reservar') }}" class="rounded-sm bg-green-600 px-6 py-2.5 text-sm text-white hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 dark:text-white">
                     Reservar un turno
                 </a>
             @endauth

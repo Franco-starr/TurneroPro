@@ -39,7 +39,7 @@
             >
         </div>
 
-        <button type="submit" class="rounded-sm bg-[#1b1b18] px-5 py-2 text-sm text-white dark:bg-[#eeeeec] dark:text-[#1C1C1A]">
+        <button type="submit" class="w-full rounded-sm bg-green-600 px-5 py-2 text-sm text-white hover:bg-green-700 sm:w-auto dark:bg-green-600 dark:hover:bg-green-700 dark:text-white">
             Ver horarios
         </button>
     </form>
@@ -56,7 +56,7 @@
                 @if ($slots)
                     <div class="flex flex-wrap gap-2">
                         @foreach ($slots as $slot)
-                            <label class="cursor-pointer rounded-sm border border-[#19140035] px-3 py-2 text-sm has-[:checked]:bg-[#1b1b18] has-[:checked]:text-white dark:border-[#3E3E3A] dark:has-[:checked]:bg-[#eeeeec] dark:has-[:checked]:text-[#1C1C1A]">
+                            <label class="cursor-pointer rounded-sm border border-[#19140035] px-3 py-2 text-sm has-[:checked]:bg-green-600 has-[:checked]:text-white dark:border-[#3E3E3A] dark:has-[:checked]:bg-green-600 dark:has-[:checked]:text-white">
                                 <input type="radio" name="hora" value="{{ $slot }}" class="sr-only" {{ old('hora') === $slot ? 'checked' : '' }}>
                                 {{ $slot }}
                             </label>
@@ -135,7 +135,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="rounded-sm bg-[#1b1b18] px-5 py-2 text-sm text-white dark:bg-[#eeeeec] dark:text-[#1C1C1A]">
+<button type="submit" class="w-full rounded-sm bg-green-600 px-5 py-2 text-sm text-white hover:bg-green-700 sm:w-auto dark:bg-green-600 dark:hover:bg-green-700 dark:text-white">
                 Confirmar reserva
             </button>
         </form>

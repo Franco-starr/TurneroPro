@@ -86,7 +86,7 @@
         </div>
 
         <div class="flex items-center gap-3">
-            <button type="submit" class="rounded-sm bg-[#1b1b18] px-5 py-2 text-sm text-white dark:bg-[#eeeeec] dark:text-[#1C1C1A]">
+            <button type="submit" class="rounded-sm bg-green-600 px-5 py-2 text-sm text-white hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 dark:text-white">
                 Guardar Turno
             </button>
             <a href="{{ route('appointments.index') }}" class="text-sm hover:underline">Cancelar</a>

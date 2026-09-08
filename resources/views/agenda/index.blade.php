@@ -8,7 +8,7 @@
         <p class="mt-1 text-[#706f6c] dark:text-[#A1A09A]">{{ ucfirst($fechaLegible) }}</p>
     </div>
 
-    <form method="GET" action="{{ route('agenda') }}" class="mb-6 flex max-w-md items-end gap-3">
+    <form method="GET" action="{{ route('agenda') }}" class="mb-6 flex max-w-md flex-wrap items-end gap-3">
         <div class="flex-1">
             <label for="fecha" class="mb-1 block text-sm font-medium">Fecha</label>
             <input
@@ -19,7 +19,7 @@
                 class="w-full rounded-sm border border-[#19140035] px-3 py-2 text-sm dark:border-[#3E3E3A] dark:bg-[#111110]"
             >
         </div>
-        <button type="submit" class="rounded-sm bg-[#1b1b18] px-5 py-2 text-sm text-white dark:bg-[#eeeeec] dark:text-[#1C1C1A]">
+        <button type="submit" class="w-full rounded-sm bg-green-600 px-5 py-2 text-sm text-white hover:bg-green-700 sm:w-auto dark:bg-green-600 dark:hover:bg-green-700 dark:text-white">
             Ver día
         </button>
     </form>

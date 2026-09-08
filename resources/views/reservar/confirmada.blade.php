@@ -16,7 +16,7 @@
                 <p><span class="text-[#706f6c] dark:text-[#A1A09A]">Cliente:</span> <span class="font-medium">{{ $reserva['cliente'] }}</span></p>
             </div>
             <div class="mt-6 flex flex-wrap items-center gap-4">
-                <a href="{{ route('reservar') }}" class="rounded-sm bg-[#1b1b18] px-5 py-2 text-sm text-white hover:bg-[#354735] dark:bg-[#eeeeec] dark:text-[#1C1C1A]">
+                <a href="{{ route('reservar') }}" class="rounded-sm bg-green-600 px-5 py-2 text-sm text-white hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 dark:text-white">
                     Reservar otro turno
                 </a>
                 <a href="{{ route('reserva.cancelar', $reserva['token']) }}" class="text-sm text-red-600 hover:underline dark:text-red-400">

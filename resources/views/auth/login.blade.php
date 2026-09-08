@@ -39,7 +39,7 @@
                 >
             </div>
 
-            <button type="submit" class="w-full rounded-sm bg-[#1b1b18] px-4 py-2 text-sm text-white dark:bg-[#eeeeec] dark:text-[#1C1C1A]">
+            <button type="submit" class="w-full rounded-sm bg-green-600 px-4 py-2 text-sm text-white hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 dark:text-white">
                 Ingresar
             </button>
         </form>
