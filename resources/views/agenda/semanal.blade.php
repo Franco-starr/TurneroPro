@@ -50,7 +50,7 @@
         </a>
     </div>
 
-    <div class="overflow-x-auto rounded-sm border border-[#19140035] dark:border-[#3E3E3A]">
+    <div class="hidden overflow-x-auto rounded-sm border border-[#19140035] dark:border-[#3E3E3A] md:block">
         <div class="flex min-w-max divide-x divide-[#19140035] dark:divide-[#3E3E3A]">
             @foreach ($dias as $dia)
                 <div class="w-64 bg-[#FDFDFC] dark:bg-[#0a0a0a]">
@@ -88,5 +88,43 @@
                 </div>
             @endforeach
         </div>
+    </div>
+
+    <div class="space-y-4 md:hidden">
+        @foreach ($dias as $dia)
+            <div class="rounded-sm border border-[#19140035] dark:border-[#3E3E3A]">
+                <div class="border-b border-[#19140035] px-4 py-3 dark:border-[#3E3E3A]">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <h2 class="text-base font-semibold capitalize">{{ $dia['fecha']->locale('es')->translatedFormat('l') }}</h2>
+                        @if ($dia['esHoy'])
+                            <span class="rounded-sm bg-[#1b1b18] px-1.5 py-0.5 text-xs font-medium text-white dark:bg-[#eeeeec] dark:text-[#1C1C1A]">Hoy</span>
+                        @endif
+                    </div>
+                    <p class="text-xs text-[#706f6c] dark:text-[#A1A09A]">{{ $dia['fecha']->format('j/n/y') }}</p>
+                    @if ($franjaApertura)
+                        <p class="mt-1 text-xs text-[#706f6c] dark:text-[#A1A09A]">
+                            {{ \Carbon\Carbon::parse($franjaApertura)->format('H:i') }}–{{ \Carbon\Carbon::parse($franjaCierre)->format('H:i') }}
+                        </p>
+                    @endif
+                </div>
+
+                <div class="space-y-3 px-4 py-4">
+                    @forelse ($dia['turnos'] as $turno)
+                        <div class="rounded-sm border border-[#19140035] p-3 dark:border-[#3E3E3A]">
+                            <p class="text-sm font-semibold">
+                                {{ $turno->fecha_hora->format('H:i') }}–{{ $turno->fecha_hora->copy()->addMinutes($turno->service->duration)->format('H:i') }}
+                            </p>
+                            <p class="mt-1 text-sm">{{ $turno->client->nombre }} {{ $turno->client->apellido }}</p>
+                            <p class="mt-0.5 flex flex-wrap items-center gap-2 text-xs text-[#706f6c] dark:text-[#A1A09A]">
+                                <span>{{ $turno->service->name }}</span>
+                                <x-status-badge :status="$turno->status" />
+                            </p>
+                        </div>
+                    @empty
+                        <p class="py-4 text-center text-sm text-[#706f6c] dark:text-[#A1A09A]">Sin turnos</p>
+                    @endforelse
+                </div>
+            </div>
+        @endforeach
     </div>
 @endsection

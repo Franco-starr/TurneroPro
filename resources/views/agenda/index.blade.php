@@ -30,7 +30,7 @@
         </div>
     @endif
 
-    <div class="overflow-x-auto rounded-sm border border-[#19140035] dark:border-[#3E3E3A]">
+    <div class="hidden overflow-x-auto rounded-sm border border-[#19140035] dark:border-[#3E3E3A] md:block">
         <table class="min-w-full divide-y divide-[#19140035] dark:divide-[#3E3E3A]">
             <thead class="bg-[#F1F1EF] dark:bg-[#111110]">
                 <tr class="text-left text-xs uppercase tracking-wide text-[#706f6c] dark:text-[#A1A09A]">
@@ -82,5 +82,40 @@
                 @endforelse
             </tbody>
         </table>
+    </div>
+
+    <div class="space-y-3 md:hidden">
+        @forelse ($turnos as $turno)
+            <div class="rounded-sm border border-[#19140035] p-4 dark:border-[#3E3E3A]">
+                <div class="flex items-center justify-between gap-3">
+                    <p class="font-medium">
+                        {{ $turno->fecha_hora->format('H:i') }}–{{ $turno->fecha_hora->copy()->addMinutes($turno->service->duration)->format('H:i') }}
+                    </p>
+                    <x-status-badge :status="$turno->status" />
+                </div>
+                <p class="mt-2 text-sm">{{ $turno->client->nombre }} {{ $turno->client->apellido }}</p>
+                <p class="mt-0.5 text-sm text-[#706f6c] dark:text-[#A1A09A]">{{ $turno->service->name }} · {{ $turno->service->duration }} min</p>
+                <div class="mt-3 flex items-center gap-2">
+                    <form method="POST" action="{{ route('appointments.complete', $turno) }}">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="rounded-sm border border-[#19140035] px-2 py-1 text-xs hover:bg-[#F1F1EF] dark:border-[#3E3E3A] dark:hover:bg-[#111110]">
+                            Completar
+                        </button>
+                    </form>
+                    <form method="POST" action="{{ route('appointments.cancel', $turno) }}">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="rounded-sm border border-[#19140035] px-2 py-1 text-xs hover:bg-[#F1F1EF] dark:border-[#3E3E3A] dark:hover:bg-[#111110]">
+                            Cancelar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        @empty
+            <p class="rounded-sm border border-[#19140035] px-4 py-8 text-center text-sm text-[#706f6c] dark:border-[#3E3E3A] dark:text-[#A1A09A]">
+                No hay turnos programados para este día.
+            </p>
+        @endforelse
     </div>
 @endsection
