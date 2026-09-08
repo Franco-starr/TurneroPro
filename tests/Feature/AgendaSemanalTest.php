@@ -151,3 +151,15 @@ it('renders the month navigation controls', function () {
         ->assertSee('Mes anterior')
         ->assertSee('Mes siguiente');
 });
+
+it('marks closed days with a Cerrado badge', function () {
+    StoreSetting::factory()->create(['days' => [1, 2, 3, 4, 5]]);
+
+    $lunes = Carbon::today()->startOfWeek(Carbon::MONDAY);
+    $sabado = $lunes->copy()->addDays(5);
+
+    $this->get(route('agenda.semanal', ['semana' => $lunes->toDateString()]))
+        ->assertOk()
+        ->assertSee($sabado->locale('es')->translatedFormat('l'))
+        ->assertSee('Cerrado');
+});

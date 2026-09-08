@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PanelController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\StoreSettingController;
 use Illuminate\Support\Facades\Route;
@@ -56,5 +57,5 @@ Route::middleware('auth')->group(function () {
     Route::get('store-settings/edit', [StoreSettingController::class, 'edit'])->name('store-settings.edit');
     Route::put('store-settings', [StoreSettingController::class, 'update'])->name('store-settings.update');
 
-    Route::view('panel', 'panel')->name('panel');
+    Route::get('panel', [PanelController::class, 'index'])->name('panel');
 });

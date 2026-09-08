@@ -53,12 +53,15 @@
     <div class="hidden overflow-x-auto rounded-sm border border-[#19140035] dark:border-[#3E3E3A] md:block">
         <div class="flex min-w-max divide-x divide-[#19140035] dark:divide-[#3E3E3A]">
             @foreach ($dias as $dia)
-                <div class="w-64 bg-[#FDFDFC] dark:bg-[#0a0a0a]">
+                <div class="w-64 bg-[#FDFDFC] dark:bg-[#0a0a0a] {{ $dia['esCerrado'] ? 'opacity-60' : '' }}">
                     <div class="border-b border-[#19140035] px-4 py-3 dark:border-[#3E3E3A]">
                         <h2 class="text-sm font-semibold capitalize">
                             {{ $dia['fecha']->locale('es')->translatedFormat('l') }}
                             @if ($dia['esHoy'])
                                 <span class="ml-1 rounded-sm bg-[#1b1b18] px-1.5 py-0.5 text-xs font-medium text-white dark:bg-[#eeeeec] dark:text-[#1C1C1A]">Hoy</span>
+                            @endif
+                            @if ($dia['esCerrado'])
+                                <span class="ml-1 rounded-sm bg-[#706f6c] px-1.5 py-0.5 text-xs font-medium text-white dark:bg-[#A1A09A]">Cerrado</span>
                             @endif
                         </h2>
                         <p class="text-xs text-[#706f6c] dark:text-[#A1A09A]">{{ $dia['fecha']->format('j/n/y') }}</p>
@@ -92,12 +95,15 @@
 
     <div class="space-y-4 md:hidden">
         @foreach ($dias as $dia)
-            <div class="rounded-sm border border-[#19140035] dark:border-[#3E3E3A]">
+            <div class="rounded-sm border border-[#19140035] dark:border-[#3E3E3A] {{ $dia['esCerrado'] ? 'opacity-60' : '' }}">
                 <div class="border-b border-[#19140035] px-4 py-3 dark:border-[#3E3E3A]">
                     <div class="flex flex-wrap items-center gap-2">
                         <h2 class="text-base font-semibold capitalize">{{ $dia['fecha']->locale('es')->translatedFormat('l') }}</h2>
                         @if ($dia['esHoy'])
                             <span class="rounded-sm bg-[#1b1b18] px-1.5 py-0.5 text-xs font-medium text-white dark:bg-[#eeeeec] dark:text-[#1C1C1A]">Hoy</span>
+                        @endif
+                        @if ($dia['esCerrado'])
+                            <span class="rounded-sm bg-[#706f6c] px-1.5 py-0.5 text-xs font-medium text-white dark:bg-[#A1A09A]">Cerrado</span>
                         @endif
                     </div>
                     <p class="text-xs text-[#706f6c] dark:text-[#A1A09A]">{{ $dia['fecha']->format('j/n/y') }}</p>

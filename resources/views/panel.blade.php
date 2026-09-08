@@ -10,6 +10,25 @@
         </p>
     </div>
 
+    <div class="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="rounded-sm border border-[#19140035] p-5 dark:border-[#3E3E3A]">
+            <p class="text-3xl font-bold">{{ $turnosHoy }}</p>
+            <p class="mt-1 text-sm text-[#706f6c] dark:text-[#A1A09A]">Turnos de hoy</p>
+        </div>
+        <div class="rounded-sm border border-[#19140035] p-5 dark:border-[#3E3E3A]">
+            <p class="text-3xl font-bold">{{ $turnosPendientes }}</p>
+            <p class="mt-1 text-sm text-[#706f6c] dark:text-[#A1A09A]">Turnos pendientes</p>
+        </div>
+        <div class="rounded-sm border border-[#19140035] p-5 dark:border-[#3E3E3A]">
+            <p class="text-3xl font-bold">{{ $clientes }}</p>
+            <p class="mt-1 text-sm text-[#706f6c] dark:text-[#A1A09A]">Clientes</p>
+        </div>
+        <div class="rounded-sm border border-[#19140035] p-5 dark:border-[#3E3E3A]">
+            <p class="text-3xl font-bold">{{ $servicios }}</p>
+            <p class="mt-1 text-sm text-[#706f6c] dark:text-[#A1A09A]">Servicios</p>
+        </div>
+    </div>
+
     <div class="grid gap-4 sm:grid-cols-2">
         <a href="{{ route('agenda') }}" class="rounded-sm border border-[#19140035] p-5 hover:bg-[#F1F1EF] dark:border-[#3E3E3A] dark:hover:bg-[#111110]">
             <h2 class="text-lg font-semibold">Agenda</h2>

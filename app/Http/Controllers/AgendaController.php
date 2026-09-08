@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Appointment;
 use App\Models\StoreSetting;
+use App\Services\AvailabilityService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -79,9 +80,15 @@ class AgendaController extends Controller
         })->all();
 
         $storeSetting = StoreSetting::query()->latest()->first();
+        $availability = app(AvailabilityService::class);
+
+        $mejoras = array_map(
+            fn (array $dia) => array_merge($dia, ['esCerrado' => ! $availability->isOpenOn($dia['fecha'])]),
+            $dias,
+        );
 
         return view('agenda.semanal', [
-            'dias' => $dias,
+            'dias' => $mejoras,
             'inicioSemana' => $inicioSemana,
             'finSemana' => $inicioSemana->copy()->addDays(6),
             'semanaAnterior' => $inicioSemana->copy()->subWeek()->toDateString(),
