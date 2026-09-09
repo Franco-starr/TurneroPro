@@ -14,7 +14,7 @@ COPY . .
 RUN npm run build
 
 # --- Etapa 2: imagen de ejecución --------------------------------------------
-FROM php:8.3-fpm-alpine
+FROM php:8.5-fpm-alpine
 
 WORKDIR /var/www/html
 
