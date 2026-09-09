@@ -11,10 +11,18 @@ chown -R www-data:www-data storage bootstrap/cache database
 echo "[deploy] creando base de datos sqlite"
 touch database/database.sqlite
 
-echo "[deploy] generando APP_KEY si falta"
+echo "[deploy] verificando APP_KEY"
 if [ -z "${APP_KEY:-}" ]; then
     export APP_KEY="$(php -r 'echo "base64:" . base64_encode(random_bytes(32));')"
-    echo "[deploy] APP_KEY generada en env (fallback)"
+    echo "[deploy] APP_KEY generada en env (no venía seteada)"
+elif ! php -r '
+    $key = getenv("APP_KEY") ?: "";
+    $ok = ($key !== "" && strlen($key) === 32) ||
+        (str_starts_with($key, "base64:") && in_array(strlen(base64_decode(substr($key, 7), true)), [16, 24, 32], true));
+    exit($ok ? 0 : 1);
+'; then
+    export APP_KEY="$(php -r 'echo "base64:" . base64_encode(random_bytes(32));')"
+    echo "[deploy] APP_KEY con formato inválido -> regenerada"
 fi
 
 echo "[deploy] cacheando configuración"
