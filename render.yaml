@@ -1,0 +1,30 @@
+# Blueprint de Render para TurneroPro.
+#
+# Cómo usarlo: subí este archivo a GitHub en la raíz del repo y, al crear el
+# Web Service, elegí "Blueprint" (o pulsá "New > Blueprint") y Render lee la
+# config. Igual lo importante es el Dockerfile: Render detecta runtime Docker.
+services:
+  - type: web
+    name: turneropro
+    runtime: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /up
+    envVars:
+      - key: APP_NAME
+        value: TurneroPro
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_URL
+        value: https://turneropro.onrender.com
+      - key: APP_KEY
+        generateValue: true
+      - key: DB_CONNECTION
+        value: sqlite
+      - key: SESSION_SECURE_COOKIE
+        value: "true"
+      - key: MAIL_MAILER
+        value: log

@@ -1,0 +1,37 @@
+.git
+.github
+
+# Ambiente / secretos
+.env
+.env.*
+!.env.example
+
+# Dependencias (se instalan dentro de la imagen)
+vendor
+node_modules
+
+# Assets compilados (se generan en la etapa de build)
+public/build
+
+# Base de datos local (la crea deploy.sh en el contenedor)
+database/*.sqlite
+database/*.sqlite-journal
+
+# Caches/logs de desarrollo
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+bootstrap/cache/*
+!storage/logs/.gitignore
+!storage/framework/cache/.gitignore
+!storage/framework/sessions/.gitignore
+!storage/framework/views/.gitignore
+!bootstrap/cache/.gitignore
+
+# Editor / SO / docs locales
+.idea
+.vscode
+Thumbs.db
+docs
+tests

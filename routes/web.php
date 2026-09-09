@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+// Health check para el deploy (Render)
+Route::get('/up', function () {
+    return response()->json(['status' => 'ok']);
+});
+
 // Rutas públicas de reserva
 Route::get('reservar', [BookingController::class, 'index'])->name('reservar');
 Route::post('reservar', [BookingController::class, 'store'])->name('reserva.store')->middleware('throttle:reservas');
