@@ -3,8 +3,10 @@
 use App\Models\Appointment;
 use App\Models\Client;
 use App\Models\Service;
+use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\DemoDataSeeder;
+use Illuminate\Support\Facades\Hash;
 
 it('seeds demo services, clients and appointments for the portfolio', function () {
     (new DatabaseSeeder)->call(DemoDataSeeder::class);
@@ -20,4 +22,13 @@ it('does not duplicate demo data when seeded twice', function () {
 
     expect(Service::query()->count())->toBe(4)
         ->and(Client::query()->count())->toBe(3);
+});
+
+it('seeds the admin user with the portfolio credentials', function () {
+    (new DatabaseSeeder)->run();
+
+    $admin = User::query()->where('email', 'test@example.com')->first();
+
+    expect($admin)->not->toBeNull()
+        ->and(Hash::check('password', $admin->password))->toBeTrue();
 });
