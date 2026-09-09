@@ -2,6 +2,8 @@
 
 @section('title', 'Ingresar - TurneroPro')
 
+@section('meta_description', 'Ingresá a TurneroPro para administrar tus servicios, clientes, turnos y la agenda de tu negocio.')
+
 @section('content')
     <div class="w-full max-w-sm rounded-sm border border-[#19140035] p-6 dark:border-[#3E3E3A]">
         <h1 class="text-2xl font-bold">Ingresar</h1>

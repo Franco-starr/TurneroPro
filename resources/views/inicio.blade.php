@@ -2,6 +2,8 @@
 
 @section('title', 'TurneroPro - Inicio')
 
+@section('meta_description', 'TurneroPro, el sistema de gestión de turnos para tu negocio. Reservá citas online y administrá clientes, servicios y disponibilidad desde un solo lugar.')
+
 @section('content')
     <div class="mx-auto max-w-4xl space-y-16">
         <section class="flex flex-col items-start gap-6 pt-4">

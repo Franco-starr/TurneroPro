@@ -4,7 +4,30 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>@yield('title', 'TurneroPro')</title>
+        @php
+            $pageTitle = trim($__env->yieldContent('title')) ?: 'TurneroPro';
+            $pageDescription = trim((string) $__env->yieldContent('meta_description')) ?: 'Sistema de gestión de turnos para tu negocio: reservás citas online, y administrás clientes, servicios y disponibilidad desde un solo lugar.';
+            $ogImage = asset('og-image.png');
+        @endphp
+
+        <title>{{ $pageTitle }}</title>
+        <meta name="description" content="{{ $pageDescription }}">
+        <link rel="canonical" href="{{ url()->current() }}">
+
+        <meta property="og:locale" content="es_AR">
+        <meta property="og:type" content="website">
+        <meta property="og:site_name" content="{{ config('app.name', 'TurneroPro') }}">
+        <meta property="og:title" content="{{ $pageTitle }}">
+        <meta property="og:description" content="{{ $pageDescription }}">
+        <meta property="og:url" content="{{ url()->current() }}">
+        <meta property="og:image" content="{{ $ogImage }}">
+
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="{{ $pageTitle }}">
+        <meta name="twitter:description" content="{{ $pageDescription }}">
+        <meta name="twitter:image" content="{{ $ogImage }}">
+
+        <link rel="icon" href="{{ asset('favicon.ico') }}">
 
         @fonts
 

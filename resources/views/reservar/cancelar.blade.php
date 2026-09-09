@@ -2,6 +2,8 @@
 
 @section('title', 'Cancelar turno - TurneroPro')
 
+@section('meta_description', 'Cancelá tu turno de TurneroPro fácilmente y liberá el horario para otras personas. Ingresá los datos de tu reserva para gestionar la cancelación.')
+
 @section('content')
     <div class="mx-auto max-w-xl">
         <h1 class="text-3xl font-bold">Cancelar turno</h1>

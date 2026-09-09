@@ -2,6 +2,8 @@
 
 @section('title', 'Mi turno - TurneroPro')
 
+@section('meta_description', '¿Ya tenés un turno? Ingresá el email que usaste al reservar para ver o cancelar tus turnos en TurneroPro.')
+
 @section('content')
     <div class="mx-auto max-w-xl">
         <h1 class="text-3xl font-bold">¿Ya tenés un turno?</h1>

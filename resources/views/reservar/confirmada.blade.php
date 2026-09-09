@@ -2,6 +2,8 @@
 
 @section('title', 'Reserva confirmada - TurneroPro')
 
+@section('meta_description', '¡Tu turno fue confirmado! Te enviamos el detalle de tu cita por email. Guardá la confirmación para presentarla en el local.')
+
 @section('content')
     <div class="max-w-xl">
         <h1 class="text-3xl font-bold text-green-700 dark:text-green-400">¡Turno reservado!</h1>

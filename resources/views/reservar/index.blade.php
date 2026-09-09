@@ -2,6 +2,8 @@
 
 @section('title', 'Reservar turno - TurneroPro')
 
+@section('meta_description', 'Reservá un turno online en menos de un minuto: elegí tu servicio, el horario disponible y confirmá tu cita sin necesidad de crear una cuenta.')
+
 @section('content')
     <div class="mb-6">
         <h1 class="text-3xl font-bold">Reservar un turno</h1>
