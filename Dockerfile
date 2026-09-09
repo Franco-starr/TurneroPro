@@ -20,7 +20,7 @@ WORKDIR /var/www/html
 
 # Dependencias del sistema + extensiones de PHP
 # En PHP 8.5 opcache es obligatorio y ya viene compilado/activo: no se instala.
-RUN apk add --no-cache nginx oniguruma-dev libzip-dev \
+RUN apk add --no-cache bash nginx oniguruma-dev libzip-dev \
     && docker-php-ext-install mbstring zip
 
 # Composer global (imagen oficial)
