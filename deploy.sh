@@ -36,6 +36,10 @@ echo "[deploy] enlace de almacenamiento público"
 echo "[deploy] migrando y sembrando datos demo"
 php artisan migrate --force --seed
 
+# La BD se crea como root durante el boot; reasignarla a www-data
+# para que php-fpm pueda escribir sesiones/cache (readonly database).
+chown -R www-data:www-data /var/www/html/database
+
 echo "[deploy] iniciando php-fpm y nginx"
 php-fpm -D
 nginx -g 'daemon off;'
