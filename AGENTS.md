@@ -157,4 +157,24 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 - Run `vendor/bin/pest` to call the test runner directly. It accepts the same file path and `--filter=testName` arguments.
 - After the feature tests pass, ask the user to run the complete suite with `php artisan test --compact`.
 
+## TurneroPro: repo-specific context
+
+Spanish-speaking appointment-booking (turnos) app: public online booking with email confirmation plus an authenticated admin panel. All UI text, validation messages, route names, and DB columns are in Spanish (`fecha_hora`, `nombre`, `apellido`, `telefono`). App locale/timezone: `es`, `America/Argentina/Buenos_Aires`.
+
+### Architecture
+- No frontend framework: pure Blade views + Tailwind CSS 4 via `@tailwindcss/vite`. Run `npm run build` (or `npm run dev`) for `@vite` assets; `public/build` is gitignored.
+- All booking/availability logic lives in `app/Services/AvailabilityService.php` (open days, business hours, overlap detection, 30-min slot generation). It is the single source of truth for "is this slot bookable" and is used by both `BookingController` and the demo seeder. Fallbacks come from `config/store.php` (`opening_time` 08:00, `closing_time` 23:00, `days` 1..7) unless a single `StoreSetting` row (id 1) exists.
+- Auth is custom (no Breeze/Jetstream/Fortify): `AuthController` handles login/logout. Named rate limiters `login` (5/min) and `reservas` (3/min per IP) are defined in `AppServiceProvider::boot` and applied via `throttle:login` / `throttle:reservas`.
+- Appointments receive a UUID `token` on create (model `booted`) used for the public `reservar/{appointment:token}/cancelar` flow without auth. `status` is an enum-backed string: `pending` / `completed` / `cancelled`.
+- All routes are in `routes/web.php` (single file, no API routes or versioning). Guests redirect to `login`, authenticated users to `panel`.
+
+### Data & deploy
+- SQLite single file `database/database.sqlite`, gitignored via `database/.gitignore`. Run `php artisan migrate --seed`. `DatabaseSeeder` creates admin `test@example.com` / `password`, then `StoreSettingSeeder` + `DemoDataSeeder` (4 services, 3 clients, ~18 appointments generated relative to today; the demo seeder early-returns if any service already exists).
+- Deployment is Render via `render.yaml` + `Dockerfile` (nginx + php 8.5-fpm; health check `/up`). `deploy.sh` runs `config:cache`/`route:cache`/`view:cache`, `migrate --force --seed`, `storage:link`, and self-heals an invalid `APP_KEY`. Production intentionally seeds demo data. No CI workflows exist.
+
+### Testing
+- Pest feature tests use `RefreshDatabase` on in-memory SQLite. The full suite is fast (~16 s, 135 tests / 452 assertions), so running `php artisan test --compact` is cheap.
+- Availability is date-sensitive (`Carbon::today()`/`now()`). Tests build dates relative to today (e.g. `Carbon::today()->addDays(5)`); a few `AvailabilityServiceTest` cases pin fixed dates (e.g. `2026-09-13` = Sunday).
+- Run `vendor/bin/pint --dirty --format agent` after PHP edits (no custom `pint.json`, defaults apply).
+
 </laravel-boost-guidelines>
