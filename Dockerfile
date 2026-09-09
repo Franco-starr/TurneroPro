@@ -19,9 +19,12 @@ FROM php:8.5-fpm-alpine
 WORKDIR /var/www/html
 
 # Dependencias del sistema + extensiones de PHP
+# opcache ya viene compilado en estático en PHP 8.5: se habilita con ini.
 RUN apk add --no-cache nginx oniguruma-dev libzip-dev \
-    && docker-php-ext-install mbstring zip opcache \
-    && docker-php-ext-enable opcache
+    && docker-php-ext-install mbstring zip \
+    && { \
+        printf 'zend_extension=opcache\nopcache.enable=1\nopcache.validate_timestamps=0\n'; \
+    } > "$PHP_INI_DIR/conf.d/zz-opcache.ini"
 
 # Composer global (imagen oficial)
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
