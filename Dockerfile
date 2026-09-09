@@ -19,22 +19,23 @@ FROM php:8.5-fpm-alpine
 WORKDIR /var/www/html
 
 # Dependencias del sistema + extensiones de PHP
-# opcache ya viene compilado en estático en PHP 8.5: se habilita con ini.
+# En PHP 8.5 opcache es obligatorio y ya viene compilado/activo: no se instala.
 RUN apk add --no-cache nginx oniguruma-dev libzip-dev \
-    && docker-php-ext-install mbstring zip \
-    && { \
-        printf 'zend_extension=opcache\nopcache.enable=1\nopcache.validate_timestamps=0\n'; \
-    } > "$PHP_INI_DIR/conf.d/zz-opcache.ini"
+    && docker-php-ext-install mbstring zip
 
 # Composer global (imagen oficial)
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Dependencias de PHP en capa cacheable (se reusa si composer.lock no cambia)
+# Dependencias de PHP en capa cacheable (se reusa si composer.lock no cambia).
+# --no-scripts: artisan aún no está en la imagen en esta capa.
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader --no-scripts
 
 # Copia el código de la aplicación (ver .dockerignore)
 COPY . .
+
+# Descubrimiento de paquetes con el código ya presente
+RUN php artisan package:discover --ansi
 
 # Assets ya compilados (public/build) desde la etapa de build
 COPY --from=assets /app/public/build public/build
